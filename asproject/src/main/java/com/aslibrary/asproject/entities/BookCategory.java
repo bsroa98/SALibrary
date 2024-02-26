@@ -1,4 +1,4 @@
-package com.aslibrary.asproject;
+package com.aslibrary.asproject.entities;
 
 import jakarta.persistence.*;
 

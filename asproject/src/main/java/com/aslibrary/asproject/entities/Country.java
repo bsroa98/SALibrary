@@ -1,20 +1,20 @@
-package com.aslibrary.asproject;
+package com.aslibrary.asproject.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-public class Gender {
+public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id_Gender", nullable = false)
+    @Column(name = "Id_Country", nullable = false)
     private Integer id;
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "Gender", nullable = false, length = 100)
-    private String gender;
+    @Column(name = "Country_Name", nullable = false, length = 100)
+    private String countryName;
 
     public Integer getId() {
         return id;
@@ -24,12 +24,12 @@ public class Gender {
         this.id = id;
     }
 
-    public String getGender() {
-        return gender;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
 }
