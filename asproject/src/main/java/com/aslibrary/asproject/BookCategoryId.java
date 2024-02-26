@@ -12,11 +12,11 @@ import java.util.Objects;
 public class BookCategoryId implements Serializable {
     private static final long serialVersionUID = -7293666685834077958L;
     @NotNull
-    @Column(name = "IdBook", nullable = false)
+    @Column(name = "Id_Book", nullable = false)
     private Integer idBook;
 
     @NotNull
-    @Column(name = "IdCategory", nullable = false)
+    @Column(name = "Id_Category", nullable = false)
     private Integer idCategory;
 
     public Integer getIdBook() {

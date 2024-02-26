@@ -7,14 +7,14 @@ public class BookCategory {
     @EmbeddedId
     private BookCategoryId id;
 
-    @MapsId("idBook")
+    @MapsId("id_Book")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdBook", nullable = false)
+    @JoinColumn(name = "id_book", nullable = false)
     private Book idBook;
 
     @MapsId("idCategory")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdCategory", nullable = false)
+    @JoinColumn(name = "Id_Category", nullable = false)
     private Category idCategory;
 
 

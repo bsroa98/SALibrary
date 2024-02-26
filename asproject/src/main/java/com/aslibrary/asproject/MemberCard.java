@@ -7,28 +7,28 @@ import jakarta.validation.constraints.NotNull;
 public class MemberCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdMemberCard", nullable = false)
-    private Integer id;
+    @Column(name = "Id_Member_Card", nullable = false)
+    private Integer idMemberCard;
 
     @NotNull
-    @Column(name = "CardNumber", nullable = false)
+    @Column(name = "Card_Number", nullable = false)
     private Integer cardNumber;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdCustomer", nullable = false)
+    @JoinColumn(name = "Id_Customer", nullable = false)
     private Customer idCustomer;
 
     @NotNull
-    @Column(name = "Balance", nullable = false)
+    @Column(name = "balance", nullable = false)
     private Integer balance;
 
     public Integer getId() {
-        return id;
+        return idMemberCard;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.idMemberCard = id;
     }
 
     public Integer getCardNumber() {

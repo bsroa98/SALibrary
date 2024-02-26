@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdBook", nullable = false)
-    private Integer id;
+    @Column(name = "id_book", nullable = false)
+    private Integer idBook;
 
     @Size(max = 100)
     @NotNull
@@ -32,11 +32,11 @@ public class Book {
     private String URLimage;
 
     public Integer getId() {
-        return id;
+        return idBook;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.idBook = id;
     }
 
     public String getTitle() {

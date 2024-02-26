@@ -8,20 +8,20 @@ public class BookPurchase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdPurchase", nullable = false)
+    @Column(name = "id_purchase", nullable = false)
     private Integer idPurchase;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdCustomer", nullable = false)
+    @JoinColumn(name = "id_customer", nullable = false)
     private Customer idCustomer;
 
     @NotNull
-    @Column(name = "IdMemberCard", nullable = false)
+    @Column(name = "Id_Member_Card", nullable = false)
     private Integer idMemberCard;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdBook", nullable = false)
+    @JoinColumn(name = "Id_Book", nullable = false)
     private Book idBook;
 
 

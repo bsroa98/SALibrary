@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 public class Gender {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdGender", nullable = false)
+    @Column(name = "Id_Gender", nullable = false)
     private Integer id;
 
     @Size(max = 100)

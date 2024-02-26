@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdCustomer", nullable = false)
+    @Column(name = "id_customer", nullable = false)
     private Integer id;
 
     @Size(max = 100)
@@ -19,17 +19,17 @@ public class Customer {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdOccupation", nullable = false)
+    @JoinColumn(name = "Id_Occupation", nullable = false)
     private Occupation idOccupation;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdCity", nullable = false)
+    @JoinColumn(name = "Id_City", nullable = false)
     private City idCity;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdCountry", nullable = false)
+    @JoinColumn(name = "Id_Country", nullable = false)
     private Country idCountry;
 
     @NotNull
@@ -38,12 +38,12 @@ public class Customer {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdGender", nullable = false)
+    @JoinColumn(name = "Id_Gender", nullable = false)
     private Gender idGender;
 
     @NotNull
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IdMemberCard", nullable = false)
+    @JoinColumn(name = "Id_Member_Card", nullable = false)
     private MemberCard idMemberCard;
 
     public Integer getId() {
