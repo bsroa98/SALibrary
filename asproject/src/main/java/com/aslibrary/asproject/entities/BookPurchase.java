@@ -24,6 +24,9 @@ public class BookPurchase {
     @JoinColumn(name = "Id_Book", nullable = false)
     private Book idBook;
 
+    @JoinColumn(name="TotalPrice", nullable = false)
+    private Double totalPrice;
+
 
     public Integer getIdPurchase() {
         return idPurchase;
@@ -57,4 +60,11 @@ public class BookPurchase {
         this.idBook = idBook;
     }
 
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }

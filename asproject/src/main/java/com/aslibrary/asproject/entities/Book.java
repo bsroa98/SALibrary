@@ -25,11 +25,15 @@ public class Book {
 
     @NotNull
     @Column(name = "Price", nullable = false)
-    private BigDecimal price;
+    private Double price;
 
     @Size(max = 100)
     @Column(name = "URLimage", length = 100)
     private String URLimage;
+
+    @NotNull
+    @Column(name = "Stock", nullable = false)
+    private Double Stock;
 
     public Integer getId() {
         return idBook;
@@ -55,11 +59,11 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -71,4 +75,11 @@ public class Book {
         this.URLimage = uRLimage;
     }
 
+    public Double getStock() {
+        return Stock;
+    }
+
+    public void setStock(Double stock) {
+        Stock = stock;
+    }
 }
