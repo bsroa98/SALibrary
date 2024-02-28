@@ -29,9 +29,9 @@ public class BookService {
 
     public Optional<Book> findBookById(int id){return bookCrudRepository.findById(id);}
 
-    public Optional<Book> findBookByISBN(String ISBN){return bookRepository.FindByISBN(ISBN);}
+    public Optional<Book> findBookByIsbn(String isbn){return bookRepository.findByIsbn(isbn);}
 
-    public Optional<Book> findBookByTitle(String title){return bookRepository.FindByISBN(title);}
+    public Optional<Book> findBookByTitle(String title){return bookRepository.findByTitle(title);}
 
     public ResponseEntity<Book> saveBook(Book book) {
         Book savedBook = bookRepository.save(book);

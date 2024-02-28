@@ -20,8 +20,8 @@ public class BookController {
     }
 
     @GetMapping("/ISBN/{isbn}")
-    public Optional<Book> getBookByISBN(@PathVariable String isbn){
-        return bookService.findBookByISBN(isbn);
+    public Optional<Book> getBookByIsbn(@PathVariable String isbn){
+        return bookService.findBookByIsbn(isbn);
     }
 
     @GetMapping("/Title/{title}")
