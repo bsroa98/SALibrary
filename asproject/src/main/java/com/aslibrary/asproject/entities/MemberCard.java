@@ -21,7 +21,7 @@ public class MemberCard {
 
     @NotNull
     @Column(name = "balance", nullable = false)
-    private Double balance;
+    public Double balance;
 
     public Integer getId() {
         return idMemberCard;
