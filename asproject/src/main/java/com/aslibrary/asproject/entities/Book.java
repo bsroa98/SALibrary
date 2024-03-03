@@ -31,8 +31,8 @@ public class Book {
     @Column(name = "URLimage", length = 100)
     private String URLimage;
 
-    @Column(name = "stock", columnDefinition = "numeric")
-    private Double stock;
+    @Column(name = "stock")
+    private Integer stock;
 
 
     @Size(max = 100)
@@ -79,12 +79,12 @@ public class Book {
         this.URLimage = uRLimage;
     }
 
-    public Double getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(Double stock) {
-        stock = stock;
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
     public String getAuthor() {

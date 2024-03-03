@@ -55,11 +55,12 @@ public class BookPurchaseService {
             MemberCard customerCard = customer.getIdMemberCard();
             Book book = optionalBook.get();
             if (book.getStock()>=quantity) {
-                if (customerCard.getBalance() < book.getPrice()) {
+                if (customerCard.getBalance() < book.getPrice()*quantity) {
                     throw new RuntimeException("Out of credit");
                 }
                     BookPurchase bookPurchase = saveBookPurchase(book,customer,customerCard,quantity);
-                    book.setStock(book.getStock() - quantity);
+                    Integer stock = book.getStock()-quantity;
+                    book.setStock(stock);
                     customerCard.setBalance(customerCard.getBalance() - bookPurchase.getTotalPrice());
                     bookService.saveBook(book);
                     memberCardService.saveCard(customerCard);
