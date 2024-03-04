@@ -19,12 +19,12 @@ public class BookController {
         return bookService.findBookById(id);
     }
 
-    @GetMapping("/ISBN/{isbn}")
-    public Optional<Book> getBookByISBN(@PathVariable String isbn){
-        return bookService.findBookByISBN(isbn);
+    @GetMapping("/isbn/{isbn}")
+    public Optional<Book> getBookByIsbn(@PathVariable String isbn){
+        return bookService.findBookByIsbn(isbn);
     }
 
-    @GetMapping("/Title/{title}")
+    @GetMapping("/title/{title}")
     public Optional<Book> getBookByTitle(@PathVariable String title){
         return bookService.findBookByTitle(title);
     }

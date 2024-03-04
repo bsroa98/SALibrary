@@ -31,9 +31,13 @@ public class Book {
     @Column(name = "URLimage", length = 100)
     private String URLimage;
 
-    @NotNull
-    @Column(name = "Stock", nullable = false)
-    private Double Stock;
+    @Column(name = "stock")
+    private Integer stock;
+
+
+    @Size(max = 100)
+    @Column(name = "Author", length = 100)
+    private String Author;
 
     public Integer getId() {
         return idBook;
@@ -75,11 +79,19 @@ public class Book {
         this.URLimage = uRLimage;
     }
 
-    public Double getStock() {
-        return Stock;
+    public Integer getStock() {
+        return stock;
     }
 
-    public void setStock(Double stock) {
-        Stock = stock;
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public String getAuthor() {
+        return Author;
+    }
+
+    public void setAuthor(String author) {
+        Author = author;
     }
 }

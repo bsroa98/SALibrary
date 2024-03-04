@@ -9,14 +9,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class BookCategoryId implements Serializable {
-    private static final long serialVersionUID = -7293666685834077958L;
+public class BookcategoryId implements Serializable {
+    private static final long serialVersionUID = -5698890975268721177L;
     @NotNull
-    @Column(name = "Id_Book", nullable = false)
+    @Column(name = "id_book", nullable = false)
     private Integer idBook;
 
     @NotNull
-    @Column(name = "Id_Category", nullable = false)
+    @Column(name = "id_category", nullable = false)
     private Integer idCategory;
 
     public Integer getIdBook() {
@@ -39,7 +39,7 @@ public class BookCategoryId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        BookCategoryId entity = (BookCategoryId) o;
+        BookcategoryId entity = (BookcategoryId) o;
         return Objects.equals(this.idBook, entity.idBook) &&
                 Objects.equals(this.idCategory, entity.idCategory);
     }

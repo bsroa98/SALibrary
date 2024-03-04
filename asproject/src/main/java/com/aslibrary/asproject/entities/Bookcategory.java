@@ -3,20 +3,28 @@ package com.aslibrary.asproject.entities;
 import jakarta.persistence.*;
 
 @Entity
-public class BookCategory {
+@Table(name = "bookcategory")
+public class Bookcategory {
     @EmbeddedId
-    private BookCategoryId id;
+    private BookcategoryId id;
 
-    @MapsId("id_Book")
+    @MapsId("idBook")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_book", nullable = false)
     private Book idBook;
 
     @MapsId("idCategory")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Id_Category", nullable = false)
+    @JoinColumn(name = "id_category", nullable = false)
     private Category idCategory;
 
+    public BookcategoryId getId() {
+        return id;
+    }
+
+    public void setId(BookcategoryId id) {
+        this.id = id;
+    }
 
     public Book getIdBook() {
         return idBook;
