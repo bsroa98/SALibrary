@@ -1,4 +1,14 @@
 package com.aslibrary.asproject.entities;
+import com.aslibrary.asproject.entities.Customer;
+import com.aslibrary.asproject.services.CustomerService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.aslibrary.asproject.entities.Customer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -45,6 +55,30 @@ public class Customer {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Id_Member_Card", nullable = false)
     private MemberCard idMemberCard;
+
+
+
+    @RestController
+    @RequestMapping("/api/customers")
+    public class CustomerController {
+
+        @Autowired
+        private CustomerService customerService;
+
+        @PostMapping("/{customerId}/update")
+        public ResponseEntity<String> updateCustomerData(
+                @PathVariable Integer customerId,
+                @RequestBody @Valid Customer updatedCustomer) {
+
+            if (!customerService.existsById(customerId)) {
+                return ResponseEntity.badRequest().body("El cliente con ID " + customerId + " no existe.");
+            }
+
+            customerService.updateCustomerData(customerId, updatedCustomer);
+
+            return ResponseEntity.ok("Datos del cliente actualizados con éxito.");
+        }
+    }
 
     public Integer getId() {
         return id;
@@ -111,3 +145,4 @@ public class Customer {
     }
 
 }
+
