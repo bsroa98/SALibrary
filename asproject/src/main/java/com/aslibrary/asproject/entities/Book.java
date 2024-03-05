@@ -39,6 +39,10 @@ public class Book {
     @Column(name = "Author", length = 100)
     private String Author;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "id_country", nullable = false)
+    private Country idCountry;
+
     public Integer getId() {
         return idBook;
     }
@@ -93,5 +97,13 @@ public class Book {
 
     public void setAuthor(String author) {
         Author = author;
+    }
+
+    public Country getIdCountry() {
+        return idCountry;
+    }
+
+    public void setIdCountry(Country idCountry) {
+        this.idCountry = idCountry;
     }
 }

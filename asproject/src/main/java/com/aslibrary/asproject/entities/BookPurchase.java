@@ -28,6 +28,10 @@ public class BookPurchase {
     private Double totalPrice;
 
 
+
+
+
+
     public Integer getIdPurchase() {
         return idPurchase;
     }

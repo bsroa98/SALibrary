@@ -1,7 +1,9 @@
 package com.aslibrary.asproject.controller;
 
 import com.aslibrary.asproject.entities.Book;
+import com.aslibrary.asproject.entities.Country;
 import com.aslibrary.asproject.services.BookService;
+import com.aslibrary.asproject.services.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,9 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private CountryService countryService;
 
     @GetMapping("/{id}")
     public Optional<Book> getBook(@PathVariable int id){
@@ -28,4 +33,6 @@ public class BookController {
     public Optional<Book> getBookByTitle(@PathVariable String title){
         return bookService.findBookByTitle(title);
     }
+
+
 }
