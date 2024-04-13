@@ -46,7 +46,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PostMapping("/create")
     @ResponseBody
     public ResponseEntity<String> createBook(@Valid @RequestBody Book book) {
         try {
