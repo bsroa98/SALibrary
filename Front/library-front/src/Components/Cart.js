@@ -1,208 +1,112 @@
-// Cart.js
-
-import React from 'react';
+import React, { useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
 
 function Cart() {
+    const [cartItems, setCartItems] = useState([]);
+    const [customerId, setCustomerId] = useState('');
+    const [membershipId, setMembershipId] = useState('');
+
+    const addToCart = (product) => {
+        const existingIndex = cartItems.findIndex((item) => item.id === product.id);
+
+        if (existingIndex !== -1) {
+            const updatedCart = [...cartItems];
+            updatedCart[existingIndex].quantity += 1;
+            setCartItems(updatedCart);
+        } else {
+            setCartItems([...cartItems, { ...product, quantity: 1 }]);
+        }
+    };
+
+    const removeFromCart = (index) => {
+        const updatedCart = [...cartItems];
+        updatedCart.splice(index, 1);
+        setCartItems(updatedCart);
+    };
+
+    const calculateTotal = () => {
+        return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    };
+
+    const handleCheckout = () => {
+        // Implement your checkout logic here
+        console.log('Checkout');
+        console.log('Customer ID:', customerId);
+        console.log('Membership ID:', membershipId);
+        console.log('Cart Items:', cartItems);
+        console.log('Total:', calculateTotal());
+    };
+
     return (
-        <section className="h-100 h-custom">
-            <div className="container h-100 py-5">
+        <div className="cart-overlay">
+            <div className="cart-container">
+                <button className="close-button" onClick={() => setCartItems([])}>Cerrar</button>
+                <h2 className="mb-4">Carrito de Compras</h2>
 
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Total</th>
+                        <th>Eliminar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {cartItems.map((item, index) => (
+                        <tr key={index}>
+                            <td>{item.name}</td>
+                            <td>
+                                <Button variant="outline-primary" size="sm" onClick={() => addToCart(item)}>+</Button>{' '}
+                                {item.quantity}{' '}
+                                <Button variant="outline-danger" size="sm" onClick={() => removeFromCart(index)}>-</Button>
+                            </td>
+                            <td>${item.price}</td>
+                            <td>${(item.price * item.quantity).toFixed(2)}</td>
+                            <td>
+                                <Button variant="danger" size="sm" onClick={() => removeFromCart(index)}>Eliminar</Button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
 
-                <div className="row d-flex justify-content-center align-items-center h-100">
-                    <div className="col">
+                <div className="total-section">
+                    <h5>Total: ${calculateTotal().toFixed(2)}</h5>
+                </div>
 
-                        <div className="table-responsive">
-                            <table className="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col" className="h5">Shopping Bag</th>
-                                    <th scope="col">Format</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Price</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <th scope="row">
-                                        <div className="d-flex align-items-center">
-                                            <img src="https://i.imgur.com/2DsA49b.webp" className="img-fluid rounded-3"
-                                                 style={{ width: '120px' }} alt="Book" />
-                                            <div className="flex-column ms-4">
-                                                <p className="mb-2">Thinking, Fast and Slow</p>
-                                                <p className="mb-0">Daniel Kahneman</p>
-                                            </div>
-                                        </div>
-                                    </th>
-                                    <td className="align-middle">
-                                        <p className="mb-0" style={{ fontWeight: 500 }}>Digital</p>
-                                    </td>
-                                    <td className="align-middle">
-                                        <div className="d-flex flex-row">
-                                            <button data-mdb-button-init data-mdb-ripple-init className="btn btn-link px-2"
-                                                    onClick={(e) => e.preventDefault()}>
-                                                <i className="fas fa-minus"></i>
-                                            </button>
+                <div className="checkout-section">
+                    <h5>Información del Cliente</h5>
+                    <Form>
+                        <Form.Group controlId="customerId">
+                            <Form.Label>ID del Cliente</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Ingrese ID del Cliente"
+                                value={customerId}
+                                onChange={(e) => setCustomerId(e.target.value)}
+                            />
+                        </Form.Group>
 
-                                            <input id="form1" min="0" name="quantity" value="2" type="number"
-                                                   className="form-control form-control-sm" style={{ width: '50px' }} />
+                        <Form.Group controlId="membershipId">
+                            <Form.Label>ID de Membresía</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Ingrese ID de Membresía"
+                                value={membershipId}
+                                onChange={(e) => setMembershipId(e.target.value)}
+                            />
+                        </Form.Group>
 
-                                            <button data-mdb-button-init data-mdb-ripple-init className="btn btn-link px-2"
-                                                    onClick={(e) => e.preventDefault()}>
-                                                <i className="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td className="align-middle">
-                                        <p className="mb-0" style={{ fontWeight: 500 }}>$9.99</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" className="border-bottom-0">
-                                        <div className="d-flex align-items-center">
-                                            <img src="https://i.imgur.com/Oj1iQUX.webp" className="img-fluid rounded-3"
-                                                 style={{ width: '120px' }} alt="Book" />
-                                            <div className="flex-column ms-4">
-                                                <p className="mb-2">Homo Deus: A Brief History of Tomorrow</p>
-                                                <p className="mb-0">Yuval Noah Harari</p>
-                                            </div>
-                                        </div>
-                                    </th>
-                                    <td className="align-middle border-bottom-0">
-                                        <p className="mb-0" style={{ fontWeight: 500 }}>Paperback</p>
-                                    </td>
-                                    <td className="align-middle border-bottom-0">
-                                        <div className="d-flex flex-row">
-                                            <button data-mdb-button-init data-mdb-ripple-init className="btn btn-link px-2"
-                                                    onClick={(e) => e.preventDefault()}>
-                                                <i className="fas fa-minus"></i>
-                                            </button>
-
-                                            <input id="form1" min="0" name="quantity" value="1" type="number"
-                                                   className="form-control form-control-sm" style={{ width: '50px' }} />
-
-                                            <button data-mdb-button-init data-mdb-ripple-init className="btn btn-link px-2"
-                                                    onClick={(e) => e.preventDefault()}>
-                                                <i className="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td className="align-middle border-bottom-0">
-                                        <p className="mb-0" style={{ fontWeight: 500 }}>$13.50</p>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="card shadow-2-strong mb-5 mb-lg-0" style={{ borderRadius: '16px' }}>
-                            <div className="card-body p-4">
-
-                                <div className="row">
-                                    <div className="col-md-6 col-lg-4 col-xl-3 mb-4 mb-md-0">
-                                        <form>
-                                            <div className="d-flex flex-row pb-3">
-                                                <div className="d-flex align-items-center pe-2">
-                                                    <input className="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1v"
-                                                           value="" aria-label="..." checked />
-                                                </div>
-                                                <div className="rounded border w-100 p-3">
-                                                    <p className="d-flex align-items-center mb-0">
-                                                        <i className="fab fa-cc-mastercard fa-2x text-dark pe-2"></i>Credit
-                                                        Card
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex flex-row pb-3">
-                                                <div className="d-flex align-items-center pe-2">
-                                                    <input className="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel2v"
-                                                           value="" aria-label="..." />
-                                                </div>
-                                                <div className="rounded border w-100 p-3">
-                                                    <p className="d-flex align-items-center mb-0">
-                                                        <i className="fab fa-cc-visa fa-2x fa-lg text-dark pe-2"></i>Debit Card
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex flex-row">
-                                                <div className="d-flex align-items-center pe-2">
-                                                    <input className="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel3v"
-                                                           value="" aria-label="..." />
-                                                </div>
-                                                <div className="rounded border w-100 p-3">
-                                                    <p className="d-flex align-items-center mb-0">
-                                                        <i className="fab fa-cc-paypal fa-2x fa-lg text-dark pe-2"></i>PayPal
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div className="col-md-6 col-lg-4 col-xl-6">
-                                        <div className="row">
-                                            <div className="col-12 col-xl-6">
-                                                <div data-mdb-input-init className="form-outline mb-4 mb-xl-5">
-                                                    <input type="text" id="typeName" className="form-control form-control-lg" siez="17"
-                                                           placeholder="John Smith" />
-                                                    <label className="form-label" htmlFor="typeName">Name on card</label>
-                                                </div>
-
-                                                <div data-mdb-input-init className="form-outline mb-4 mb-xl-5">
-                                                    <input type="text" id="typeExp" className="form-control form-control-lg" placeholder="MM/YY"
-                                                           size="7" id="exp" minLength="7" maxLength="7" />
-                                                    <label className="form-label" htmlFor="typeExp">Expiration</label>
-                                                </div>
-                                            </div>
-                                            <div className="col-12 col-xl-6">
-                                                <div data-mdb-input-init className="form-outline mb-4 mb-xl-5">
-                                                    <input type="text" id="typeText" className="form-control form-control-lg" siez="17"
-                                                           placeholder="1111 2222 3333 4444" minLength="19" maxLength="19" />
-                                                    <label className="form-label" htmlFor="typeText">Card Number</label>
-                                                </div>
-
-                                                <div data-mdb-input-init className="form-outline mb-4 mb-xl-5">
-                                                    <input type="password" id="typeText" className="form-control form-control-lg"
-                                                           placeholder="&#9679;&#9679;&#9679;" size="1" minLength="3" maxLength="3" />
-                                                    <label className="form-label" htmlFor="typeText">Cvv</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4 col-xl-3">
-                                        <div className="d-flex justify-content-between" style={{ fontWeight: 500 }}>
-                                            <p className="mb-2">Subtotal</p>
-                                            <p className="mb-2">$23.49</p>
-                                        </div>
-
-                                        <div className="d-flex justify-content-between" style={{ fontWeight: 500 }}>
-                                            <p className="mb-0">Shipping</p>
-                                            <p className="mb-0">$2.99</p>
-                                        </div>
-
-                                        <hr className="my-4" />
-
-                                        <div className="d-flex justify-content-between mb-4" style={{ fontWeight: 500 }}>
-                                            <p className="mb-2">Total (tax included)</p>
-                                            <p className="mb-2">$26.48</p>
-                                        </div>
-
-                                        <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-block btn-lg">
-                                            <div className="d-flex justify-content-between">
-                                                <span>Checkout</span>
-                                                <span>$26.48</span>
-                                            </div>
-                                        </button>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
+                        <Button variant="primary" onClick={handleCheckout}>
+                            Pagar
+                        </Button>
+                    </Form>
                 </div>
             </div>
-        </section>
+        </div>
     );
 }
 
 export default Cart;
-
