@@ -1,4 +1,8 @@
-body{
+body {
+    background-color: #323232;
+}
+
+.container {
     background-color: #323232;
 }
 
@@ -52,29 +56,4 @@ img {
 footer {
     text-align: center;
     padding: 10px;
-}
-
-/* Media queries para ajustar estilos en diferentes tamaños de pantalla */
-
-@media (max-width: 360px) {
-    .productcard {
-        padding: 5px;
-    }
-}
-
-@media (min-width: 361px) and (max-width: 375px) {
-
-}
-
-@media (min-width: 376px) and (max-width: 720px) {
-    .contenido {
-        flex-direction: column;
-    }
-
-    .categoria, .product {
-        flex: auto;
-    }
-}
-
-@media (min-width: 721px) and (max-width: 1920px) {
 }

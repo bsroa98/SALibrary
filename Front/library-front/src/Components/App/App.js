@@ -1,13 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // Importa Routes
+import Login from '../LogIn/LogIn';
+import Signup from '../SignUp/SignUp';
+import Shop from '../Shop/Shop';
 import '../../Styles/App.css';
 import '../../Styles/cart.css';
-import Cart from "../Cart";
+import Cart from '../Cart';
+
 function App() {
-
-  const url = "https://aslibrarystorage.blob.core.windows.net/bookimages?sp=r&st=2024-04-20T00:09:25Z&se=2024-04-20T08:09:25Z&skoid=8608da46-50a7-44a0-a5ad-9bde91dea05b&sktid=d4227148-4930-4f06-8baa-0845ff57e541&skt=2024-04-20T00:09:25Z&ske=2024-04-20T08:09:25Z&sks=b&skv=2022-11-02&sip=186.155.110.85&sv=2022-11-02&sr=c&sig=6amb94Vr34H5HHBOPt4jSozLEer2fCQUDgK%2BRcplyGo%3D";
-
-  const partes = url.split("?");
-
+  const url =
+    'https://aslibrarystorage.blob.core.windows.net/bookimages?sp=r&st=2024-04-22T20:50:55Z&se=2024-04-29T04:57:55Z&skoid=8608da46-50a7-44a0-a5ad-9bde91dea05b&sktid=d4227148-4930-4f06-8baa-0845ff57e541&skt=2024-04-22T20:50:55Z&ske=2024-04-29T04:57:55Z&sks=b&skv=2022-11-02&sv=2022-11-02&sr=c&sig=7K901C3MdIgfYpWkZtsRpte6EHep%2Fqp%2FpoBr%2Byp5nsg%3D';
+  const partes = url.split('?');
   const urlRecurso = partes[0];
 
   const token = partes[1];
@@ -20,7 +23,11 @@ function App() {
 
   useEffect(() => {
     const closeCartOnOutsideClick = (event) => {
-      if (showCart && !event.target.closest('.cart-container') && !event.target.closest('.cart-button')) {
+      if (
+        showCart &&
+        !event.target.closest('.cart-container') &&
+        !event.target.closest('.cart-button')
+      ) {
         setShowCart(false);
       }
     };
@@ -46,58 +53,37 @@ function App() {
     setShowCart(!showCart);
   };
 
-  console.log("URL del recurso:", urlRecurso);
-  console.log("Token:", token);
-  return (
-    <div className="body">
-      <div className="header">
-        <a href="/">Home</a>
-        <a href="/">Shop</a>
-        <input type="text" placeholder="Search" />
-        <a href="/">Sign Up</a>
-        <a href="/">Sign In</a>
-        <button onClick={toggleCart} className="cart-button">Carrito ({cartItems.length})</button>
-      </div>
+  console.log('URL del recurso:', urlRecurso);
+  console.log('Token:', token);
 
-      {showCart && (
+  return (
+    <Router>
+      <div className="body">
+        <div className="header">
+          <Link to="/">Home</Link>
+          <Link to="/Shop">Shop</Link>
+          <input type="text" placeholder="Search" />
+          <Link to="/LogIn">Sign In</Link>
+          <Link to="/SignUp">Sign Up</Link>
+          <button onClick={toggleCart} className="cart-button">
+            Carrito ({cartItems.length})
+          </button>
+        </div>
+        <Routes>
+          <Route path="/LogIn" element={<Login />} />
+          <Route path="/SignUp" element={<Signup />} />
+          <Route path="/Shop" element={<Shop addToCart={addToCart} />} />
+        </Routes>
+
+        {showCart && (
           <div className="cart-container">
             <div className="cart">
               <Cart cartItems={cartItems} removeFromCart={removeFromCart} />
             </div>
           </div>
-      )}
-      <div className="contenido">
-        <section className="product">
-          <div className="productcard">
-            <img src ={`${urlRecurso}/DraculaBook.webp?${token}`} alt="accesorio" />
-            <h3>Accesorios</h3>
-            <p>Precio: $50.000</p>
-            <button className="button">Dracula</button>
-          </div>
-          <div className="productcard">
-            <img src="../../imgs/LaDivinaComedia.jpg" alt="ropa" />
-            <h3>Ropa</h3>
-            <p>Precio: $60.000</p>
-            <button className="button">La Divina Comedia</button>
-          </div>
-          <div className="productcard">
-            <img src="../../imgs/Dracula.jpg" alt="zapato" />
-            <h3>Zapatos</h3>
-            <p>Precio: $70.000</p>
-            <button className="button">Dracula</button>
-          </div>
-          <div className="productcard">
-            <img src="../../imgs/LaDivinaComedia.jpg" alt="perfume" />
-            <h3>Perfume</h3>
-            <p>Precio: $80.000</p>
-            <button className="button">La Divina Comedia</button>
-          </div>
-        </section>
+        )}
       </div>
-      <footer>
-        <p></p>
-      </footer>
-    </div>
+    </Router>
   );
 }
 
