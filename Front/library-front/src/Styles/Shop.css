@@ -2,6 +2,11 @@ body{
     background-color: #323232;
 }
 
+footer{
+    background-color: #323232;
+}
+
+
 .body {
     background-color: #323232;
     margin: 0;
@@ -9,11 +14,11 @@ body{
     color: #fff;
 }
 
-.header {
+.header-shop {
     display:flex;
-    justify-content: space-between;
+    justify-content: end;
     padding: 10px;
-    background-color: #ffffff;
+    background-color: #323232;
 }
 
 .header a {
@@ -22,6 +27,7 @@ body{
 }
 
 .contenido {
+    color: #ffffff;
     display: flex;
     flex-wrap: wrap;
 }

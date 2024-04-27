@@ -9,7 +9,22 @@ body {
 }
 
 .container {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
     background-color: #323232;
+}
+
+.head{
+    font-size: 30px;
+    border: 1px;
+}
+.subtitle{
+    color: orange;
+}
+
+.error {
+    border: 1px solid red !important;
 }
 
 .header {

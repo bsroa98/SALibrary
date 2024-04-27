@@ -18,13 +18,13 @@ function LogIn() {
                                     <a href="register.html" class="head">¿No tienes cuenta? Registráte</a>
                                 </div>
                                 <div class="footer">
-                                    <button class="btn btn-primary btn-block">Iniciar Sesión</button>
+                                    <button className="btn btn-primary btn-block">Iniciar Sesión</button>
                                 </div>
                             </div>
                         </form>
             </div>
             <footer>
-                <div>
+                <div class="copyright">
                     <p>Copyright <script>document.write(new Date().getFullYear())</script> &copy;</p>
                 </div>
             </footer>

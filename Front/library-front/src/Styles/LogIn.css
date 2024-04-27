@@ -3,6 +3,9 @@ body {
 }
 
 .container {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
     background-color: #323232;
 }
 
@@ -11,6 +14,10 @@ body {
     margin: 0;
     padding: 0;
     color: #fff;
+}
+
+.head{
+    color: #ffffff;
 }
 
 .header {
@@ -56,4 +63,8 @@ img {
 footer {
     text-align: center;
     padding: 10px;
+}
+
+copyright{
+    color: #ffffff;
 }
