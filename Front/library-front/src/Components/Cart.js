@@ -9,7 +9,7 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
         customerId: '',
         membershipId: ''
     });
-    const [showCart, setShowCart] = useState(true); // Estado para mostrar/ocultar el carrito
+    const [showCart] = useState(true); // Estado para mostrar/ocultar el carrito
 
 
 
@@ -39,7 +39,7 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
 
     const decrementQuantity = (itemId) => {
         const updatedCartItems = cartItems.map((item) => {
-            if (item.id === itemId && item.quantity > 0) {
+            if (item.id === itemId && item.quantity > 1) {
                 return { ...item, quantity: item.quantity - 1 };
             }
             return item;
@@ -93,7 +93,7 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
                                         </button>
                                         <input
                                             id={`quantity-${item.id}`}
-                                            min="0"
+                                            min="1"
                                             name="quantity"
                                             value={item.quantity}
                                             type="number"
