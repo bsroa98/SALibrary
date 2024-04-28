@@ -32,6 +32,8 @@
 }
 
 .close-button {
+    position: relative;
+    right: -95%;
     background: none;
     border: none;
     cursor: pointer;
