@@ -16,8 +16,7 @@ function Shop() {
 
 
   const [cartItems, setCartItems] = useState([]);
-  const [productItems, setProductItems] = useState([
-  {
+  const allProducts = [{
     id: 3,
     name: "Dracula",
     author: "Bram Stoker",
@@ -25,30 +24,32 @@ function Shop() {
     url: `${urlRecurso}/DraculaBook.webp?${token}`,
     quantity: 1
   },
-  {
-    id: 1,
-    name: "HabitosAtomicos",
-    author: "James Clear",
-    price: 100000,
-    url: `${urlRecurso}/HabitosAtomicosBook.jpg?${token}`,
-    quantity: 1
-  },
-  {
-    id: 2,
-    name: "Orgullo y Prejuicio",
-    author: "Jane Austen",
-    price: 80000,
-    url: `${urlRecurso}/OrgYPrejBook.webp?${token}`,
-    quantity: 1
-  },
-  {
-    id: 5,
-    name: "Arte de la Guerra",
-    author: "Sun Tzu",
-    price: 70000,
-    url: `${urlRecurso}/arte de la guerra.jpeg?${token}`,
-    quantity: 1
-  }]);
+    {
+      id: 1,
+      name: "HabitosAtomicos",
+      author: "James Clear",
+      price: 100000,
+      url: `${urlRecurso}/HabitosAtomicosBook.jpg?${token}`,
+      quantity: 1
+    },
+    {
+      id: 2,
+      name: "Orgullo y Prejuicio",
+      author: "Jane Austen",
+      price: 80000,
+      url: `${urlRecurso}/OrgYPrejBook.webp?${token}`,
+      quantity: 1
+    },
+    {
+      id: 5,
+      name: "Arte de la Guerra",
+      author: "Sun Tzu",
+      price: 70000,
+      url: `${urlRecurso}/arte de la guerra.jpeg?${token}`,
+      quantity: 1
+    }]
+  const [productItems, setProductItems] = useState([...allProducts
+  ]);
   const [showCart, setShowCart] = useState(false);
 
   const [searchInput, setSearchInput] = useState('');
@@ -61,15 +62,18 @@ function Shop() {
     const handleSearch = () => {
     const searchTerm = searchInput.toLowerCase();
 
-    const searchResults = productItems.filter((item) => {
+    const searchResults = allProducts.filter((item) => {
       const nameMatch = item.name.toLowerCase().includes(searchTerm);
       const isbnMatch = item.isbn && item.isbn.toLowerCase().includes(searchTerm);
       const authorMatch = item.author.toLowerCase().includes(searchTerm);
+      console.log(nameMatch, searchTerm,item);
       return nameMatch || isbnMatch || authorMatch;
     });
 
     setSearchHistory((prevHistory) => [...prevHistory, searchInput]);
     setProductItems(searchResults);
+
+
     };
 
 
