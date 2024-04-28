@@ -14,12 +14,23 @@ footer{
     color: #fff;
 }
 
+.shop-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .header-shop {
-    display:flex;
-    justify-content: end;
     padding: 10px;
     background-color: #323232;
 }
+
+.header-search {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
 
 .header a {
     color: #000000;

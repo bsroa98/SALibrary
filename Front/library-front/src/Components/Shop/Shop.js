@@ -18,7 +18,7 @@ function Shop() {
   const [cartItems, setCartItems] = useState([]);
   const [productItems, setProductItems] = useState([
   {
-    id: 1,
+    id: 3,
     name: "Dracula",
     author: "Bram Stoker",
     price: 70000,
@@ -26,7 +26,7 @@ function Shop() {
     quantity: 1
   },
   {
-    id: 12,
+    id: 1,
     name: "HabitosAtomicos",
     author: "James Clear",
     price: 100000,
@@ -34,7 +34,7 @@ function Shop() {
     quantity: 1
   },
   {
-    id: 1,
+    id: 2,
     name: "Orgullo y Prejuicio",
     author: "Jane Austen",
     price: 80000,
@@ -42,7 +42,7 @@ function Shop() {
     quantity: 1
   },
   {
-    id: 1,
+    id: 5,
     name: "Arte de la Guerra",
     author: "Sun Tzu",
     price: 70000,
@@ -50,6 +50,29 @@ function Shop() {
     quantity: 1
   }]);
   const [showCart, setShowCart] = useState(false);
+
+  const [searchInput, setSearchInput] = useState('');
+  const [searchHistory, setSearchHistory] = useState([]);
+
+    const handleSearchInputChange = (event) => {
+        setSearchInput(event.target.value);
+    };
+
+    const handleSearch = () => {
+    const searchTerm = searchInput.toLowerCase();
+
+    const searchResults = productItems.filter((item) => {
+      const nameMatch = item.name.toLowerCase().includes(searchTerm);
+      const isbnMatch = item.isbn && item.isbn.toLowerCase().includes(searchTerm);
+      const authorMatch = item.author.toLowerCase().includes(searchTerm);
+      return nameMatch || isbnMatch || authorMatch;
+    });
+
+    setSearchHistory((prevHistory) => [...prevHistory, searchInput]);
+    setProductItems(searchResults);
+    };
+
+
 
   const addToCart = (product) => {
     if (cartItems.find((p)=>p.id===product.id)==null){
@@ -71,15 +94,29 @@ function Shop() {
 
   return (
     <div className="body">
+    <section className="shop-section">
+        <div className="header-search">
+        <input
+            type="text"
+            placeholder="Search"
+            value={searchInput}
+            onChange={handleSearchInputChange}
+        />
+        <button type="button" className="btn btn-primary btn-block" onClick={handleSearch}>
+            Buscar
+        </button>
+        </div>
         <div className="header-shop">
             <button type="button" className="btn btn-light" onClick={toggleCart}>
-            <MdOutlineShoppingCart />
-            <span className="cart-count">{cartItems.length}</span>
+                <MdOutlineShoppingCart />
+                <span className="cart-count">{cartItems.length}</span>
             </button>
         </div>
-        <Routes>
-            <Route path="/Shop" element={<Shop addToCart={addToCart} />} />
-        </Routes>
+    </section>
+
+    <Routes>
+        <Route path="/Shop" element={<Shop addToCart={addToCart} />} />
+    </Routes>
 
         {showCart && (
             <div className="cart-overlay">
