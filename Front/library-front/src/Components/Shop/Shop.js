@@ -111,6 +111,9 @@ function Shop() {
         if (filters.author && !product.author.toLowerCase().includes(filters.author.toLowerCase())) {
           match = false;
         }
+        if (filters.isbn && !product.isbn.toLowerCase().includes(filters.isbn.toLowerCase())) {
+          match = false;
+        }
         if (filters.publicationDate && !product.publicationDate.toLowerCase().includes(filters.publicationDate.toLowerCase())) {
           match = false;
         }
@@ -196,6 +199,13 @@ function Shop() {
               name="author"
               placeholder="Author"
               value={filters.author}
+              onChange={handleFilterChange}
+            />
+            <input
+              type="number"
+              name="isbn"
+              placeholder="ISBN"
+              value={filters.isbn}
               onChange={handleFilterChange}
             />
             <input
