@@ -52,7 +52,7 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
     return (
         <div className="cart-overlay">
             {showCart && ( // Mostrar el carrito solo si showCart es true
-                <div className="cart-container">
+                <div className="cart-container cart">
                     <button className="close-button" onClick={onCloseCart}><CgClose /></button>
                     <h2 className="mb-4">Shopping Cart</h2>
 
@@ -125,6 +125,35 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
                                 </td>
                             </tr>
                         ))}
+                        <tr><div className="checkout-section">
+
+                            <h5>Información del Cliente</h5>
+                            <Form>
+                                <Form.Group controlId="customerId">
+                                    <Form.Label>ID del Cliente</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Ingrese ID del Cliente"
+                                        value={customerInfo.customerId}
+                                        onChange={(e) => setCustomerInfo({ ...customerInfo, customerId: e.target.value })}
+                                    />
+                                </Form.Group>
+
+                                <Form.Group controlId="membershipId">
+                                    <Form.Label>ID de Membresía</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Ingrese ID de Membresía"
+                                        value={customerInfo.membershipId}
+                                        onChange={(e) => setCustomerInfo({ ...customerInfo, membershipId: e.target.value })}
+                                    />
+                                </Form.Group>
+
+                                <Button variant="primary" onClick={handleCheckout}>
+                                    Pagar
+                                </Button>
+                            </Form>
+                        </div></tr>
                         </tbody>
                     </table>
 
@@ -132,34 +161,8 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
                         <h5>Total: ${calculateTotal().toFixed(2)}</h5>
                     </div>
 
-                    <div className="checkout-section">
-                        <h5>Información del Cliente</h5>
-                        <Form>
-                            <Form.Group controlId="customerId">
-                                <Form.Label>ID del Cliente</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Ingrese ID del Cliente"
-                                    value={customerInfo.customerId}
-                                    onChange={(e) => setCustomerInfo({ ...customerInfo, customerId: e.target.value })}
-                                />
-                            </Form.Group>
 
-                            <Form.Group controlId="membershipId">
-                                <Form.Label>ID de Membresía</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Ingrese ID de Membresía"
-                                    value={customerInfo.membershipId}
-                                    onChange={(e) => setCustomerInfo({ ...customerInfo, membershipId: e.target.value })}
-                                />
-                            </Form.Group>
 
-                            <Button variant="primary" onClick={handleCheckout}>
-                                Pagar
-                            </Button>
-                        </Form>
-                    </div>
                 </div>
             )}
 
