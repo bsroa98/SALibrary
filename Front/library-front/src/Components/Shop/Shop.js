@@ -18,8 +18,6 @@ function Shop() {
   const urlRecurso = partes[0];
   const token = partes[1];
 
-
-  const [cartItems, setCartItems] = useState([]);
   const allProducts = [{
     id: 3,
     name: "Dracula",
@@ -27,7 +25,9 @@ function Shop() {
     price: 70000,
     url: `${urlRecurso}/DraculaBook.webp?${token}`,
     quantity: 1,
-    isbn : "9789583054891"
+    isbn : "9789583054891",
+    genre: "Terror",
+    publicationDate: "1897-05-26"
   },
     {
       id: 1,
@@ -36,7 +36,9 @@ function Shop() {
       price: 100000,
       url: `${urlRecurso}/HabitosAtomicosBook.jpg?${token}`,
       quantity: 1,
-      isbn : "9789584277954"
+      isbn : "9789584277954",
+      genre: "Autoayuda",
+      publicationDate: "2018-10-16"
     },
     {
       id: 2,
@@ -45,7 +47,9 @@ function Shop() {
       price: 80000,
       url: `${urlRecurso}/OrgYPrejBook.webp?${token}`,
       quantity: 1,
-      isbn : "9789585285330"
+      isbn : "9789585285330",
+      genre: "Clásico",
+      publicationDate: "1813-01-28"
     },
     {
       id: 5,
@@ -54,36 +58,72 @@ function Shop() {
       price: 70000,
       url: `${urlRecurso}/arte de la guerra.jpeg?${token}`,
       quantity: 1,
-      isbn : "9789583054"
+      isbn : "9789583054",
+      genre: "Estrategia",
+      publicationDate: "500 AC"
     }]
-  const [productItems, setProductItems] = useState([...allProducts
-  ]);
-  const [showCart, setShowCart] = useState(false);
 
+  const [cartItems, setCartItems] = useState([]);
+  const [productItems, setProductItems] = useState([...allProducts]);
+  const [showCart, setShowCart] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [searchHistory, setSearchHistory] = useState([]);
+  const [filters, setFilters] = useState({
+    genre: '',
+    priceMin: '',
+    priceMax: '',
+    author: '',
+    publicationDate: '',
+  });
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
 
-    const handleSearchInputChange = (event) => {
-        setSearchInput(event.target.value);
-    };
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
 
-    const handleSearch = () => {
+  const handleSearch = () => {
     const searchTerm = searchInput.toLowerCase();
 
     const searchResults = allProducts.filter((item) => {
       const nameMatch = item.name.toLowerCase().includes(searchTerm);
       const isbnMatch = item.isbn && item.isbn.toLowerCase().includes(searchTerm);
       const authorMatch = item.author.toLowerCase().includes(searchTerm);
-      console.log(nameMatch, searchTerm,item);
       return nameMatch || isbnMatch || authorMatch;
     });
 
     setSearchHistory((prevHistory) => [...prevHistory, searchInput]);
-    setProductItems(searchResults);
+    applyFilters(searchResults);
+  };
 
+  const applyFilters = (products) => {
+    if (Array.isArray(products)) {
+      let filteredProducts = products.filter((product) => {
+        let match = true;
+        if (filters.genre && product.genre.toLowerCase() !== filters.genre.toLowerCase()) {
+          match = false;
+        }
+        if (filters.priceMin && parseInt(product.price) < parseInt(filters.priceMin)) {
+          match = false;
+        }
+        if (filters.priceMax && parseInt(product.price) > parseInt(filters.priceMax)) {
+          match = false;
+        }
+        if (filters.author && !product.author.toLowerCase().includes(filters.author.toLowerCase())) {
+          match = false;
+        }
+        if (filters.publicationDate && !product.publicationDate.toLowerCase().includes(filters.publicationDate.toLowerCase())) {
+          match = false;
+        }
+        return match;
+      });
+      setProductItems(filteredProducts);
+    }
+  };
 
-    };
-
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilters({ ...filters, [name]: value });
+  };
 
 
   const addToCart = (product) => {
@@ -99,8 +139,13 @@ function Shop() {
     const updatedCart = cartItems.filter((p)=>p.id!==productId)
     setCartItems(updatedCart);
   };
+
   const toggleCart = () => {
     setShowCart(!showCart);
+  };
+
+  const toggleFilterPanel = () => {
+    setShowFilterPanel(!showFilterPanel);
   };
 
   function toggleFilter() {
@@ -112,7 +157,7 @@ function Shop() {
     <div className="body">
     <section className="shop-section">
         <div className="header-search">
-        <button type="button" className="btn btn-light btn-block p-2" onClick={toggleFilter}><IoFilter /></button>
+        <button type="button" className="btn btn-light btn-block p-2" onClick={toggleFilterPanel}><IoFilter /></button>
         <input
             className="form-control w-50 form-control-lg rounded"
             type="text"
@@ -123,6 +168,45 @@ function Shop() {
         <button type="button" className="btn btn-primary btn-block p-2" onClick={handleSearch}>
           <FaSearch />
         </button>
+        {showFilterPanel &&
+          <div className="filters-panel">
+            <input
+              type="text"
+              name="genre"
+              placeholder="Gender"
+              value={filters.genre}
+              onChange={handleFilterChange}
+            />
+            <input
+              type="number"
+              name="priceMin"
+              placeholder="Min Price"
+              value={filters.priceMin}
+              onChange={handleFilterChange}
+            />
+            <input
+              type="number"
+              name="priceMax"
+              placeholder="Max Price"
+              value={filters.priceMax}
+              onChange={handleFilterChange}
+            />
+            <input
+              type="text"
+              name="author"
+              placeholder="Author"
+              value={filters.author}
+              onChange={handleFilterChange}
+            />
+            <input
+              type="text"
+              name="publicationDate"
+              placeholder="Publication Date"
+              value={filters.publicationDate}
+              onChange={handleFilterChange}
+            />
+          </div>
+        }
         </div>
         <div className="header-shop">
             <button type="button" className="btn btn-light " onClick={toggleCart}>
@@ -155,8 +239,10 @@ function Shop() {
                 <div className="productcard" key={item.id}>
                     <img src={item.url} alt="accesorio"/>
                     <h3>{item.name}</h3>
-                    <p>Precio: {item.price}</p>
-                    <button className="btn btn-primary btn-block" onClick={() => addToCart(item)}>Añadir al carrito</button>
+                    <p>Price: {item.price}</p>
+                    <p>Author: {item.author}</p>
+                    <p>Gender: {item.genre}</p>
+                    <button className="btn btn-primary btn-block" onClick={() => addToCart(item)}>Add to Cart</button>
                 </div>
             ))}
           </section>
