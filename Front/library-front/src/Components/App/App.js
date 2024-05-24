@@ -15,7 +15,7 @@ function App() {
   <Router>
     <div className="body">
         <div className="header">
-            <Link to="/" className="btn-link">Home</Link>
+            <Link to="/">Home</Link>
             <Link to="/Shop" className="btn-link">Shop</Link>
             <Link to="/LogIn">Sign In</Link>
             <Link to="/SignUp">Sign Up</Link>

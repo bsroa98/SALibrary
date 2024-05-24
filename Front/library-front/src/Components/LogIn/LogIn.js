@@ -3,32 +3,28 @@ import '../../Styles/LogIn.css';
 
 function LogIn() {
     return (
-        <body>
-            <div class="container">
-                        <form class="header-form">
-                            <div class="head">Iniciar Sesión</div>
-                            <div class="body">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Correo" />
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" placeholder="Contraseña*" />
-                                </div>
-                                <div class="head">
-                                    <a href="register.html" class="head">¿No tienes cuenta? Registráte</a>
-                                </div>
-                                <div class="footer">
-                                    <button className="btn btn-primary btn-block">Iniciar Sesión</button>
-                                </div>
-                            </div>
-                        </form>
+        <div className="contentlogin">
+            <div className="inicio">Iniciar Sesión</div>
+            <main className="body">
+                <form className="login-form">
+                    <div className="form-group">
+                        <input type="email" className="form-control" placeholder="Correo" />
+                    </div>
+                    <div className="form-group">
+                        <input type="password" className="form-control" placeholder="Contraseña*" />
+                    </div>
+                    <div className="register-link">
+                        <div className="head">¿No tienes cuenta? <span className="register-text">Regístrate</span></div>
+                    </div>
+                    <div className="buttonLogIn">
+                        <button className="btn btn-primary btn-block">Iniciar Sesión</button>
+                    </div>
+                </form>
+            </main>
+            <div className="copyright">
+                Copyright {new Date().getFullYear()} &copy;
             </div>
-            <footer>
-                <div class="copyright">
-                    <p>Copyright <script>document.write(new Date().getFullYear())</script> &copy;</p>
-                </div>
-            </footer>
-        </body>
+        </div>
     );
 }
 

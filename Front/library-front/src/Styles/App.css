@@ -57,6 +57,69 @@ footer {
     background-color: white;
 }
 
+.container {
+  max-width: 400px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.form-group button.add {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.form-group button.edit {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.form-group button.delete {
+  background-color: #f44336;
+  color: #fff;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+ul li span {
+  margin-right: 10px;
+}
+
 /* Media queries para ajustar estilos en diferentes tamaños de pantalla */
 
 @media (max-width: 360px) {
