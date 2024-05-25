@@ -28,27 +28,30 @@ public class CustomerService {
         return customerRepository.existsById(customerId);
     }
 
+    @Transactional
+    public ResponseEntity<String> updateCustomerData(Integer customerId, Customer updatedCustomer) {
+        Optional<Customer> existingCustomerOpt = customerRepository.findById(customerId);
 
-        @Transactional
-        public void updateCustomerData(Integer customerId, Customer updatedCustomer) {
-            Customer existingCustomer = customerRepository.findById(customerId).orElse(null);
-
-
-            existingCustomer.setName(updatedCustomer.getName());
-            existingCustomer.setIdOccupation(updatedCustomer.getIdOccupation());
-            existingCustomer.setIdCity(updatedCustomer.getIdCity());
-            existingCustomer.setIdCountry(updatedCustomer.getIdCountry());
-            existingCustomer.setAge(updatedCustomer.getAge());
-            existingCustomer.setIdGender(updatedCustomer.getIdGender());
-            existingCustomer.setIdMemberCard(updatedCustomer.getIdMemberCard());
-
-            this.save(existingCustomer);
+        if (!existingCustomerOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El cliente con ID " + customerId + " no existe.");
         }
 
-public ResponseEntity<Customer> save(Customer customer){
-    Customer customerSaved= customerRepository.save(customer);
-    return ResponseEntity.status(HttpStatus.OK).body(customerSaved);
+        Customer existingCustomer = existingCustomerOpt.get();
+        existingCustomer.setName(updatedCustomer.getName());
+        existingCustomer.setIdOccupation(updatedCustomer.getIdOccupation());
+        existingCustomer.setIdCity(updatedCustomer.getIdCity());
+        existingCustomer.setIdCountry(updatedCustomer.getIdCountry());
+        existingCustomer.setAge(updatedCustomer.getAge());
+        existingCustomer.setIdGender(updatedCustomer.getIdGender());
+        existingCustomer.setIdMemberCard(updatedCustomer.getIdMemberCard());
 
-}
+        customerRepository.save(existingCustomer);
 
+        return ResponseEntity.ok("Datos del cliente actualizados con éxito.");
+    }
+
+    public ResponseEntity<Customer> createCustomer(Customer customer) {
+        Customer customerSaved = customerRepository.save(customer);
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerSaved);
+    }
 }

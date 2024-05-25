@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../../Styles/SignUp.css';
 
 function SignUp() {
@@ -45,12 +46,24 @@ function SignUp() {
 
         if (isValid) {
             console.log('Formulario válido, enviando...');
+            handleSubmit();
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/api/users/register', formData);
+            console.log('User registered:', response.data);
+            // Puedes agregar aquí la lógica para redireccionar al usuario o mostrar un mensaje de éxito
+        } catch (error) {
+            console.error('There was an error registering the user!', error);
+            // Puedes agregar aquí la lógica para manejar el error, como mostrar un mensaje al usuario
         }
     };
 
     return (
         <div className="containerSignup">
-            <form id="registerForm">
+            <form id="registerForm" onSubmit={(e) => e.preventDefault()}>
                 <div className="cabecerasign">¿Qué esperas para registrarte y empezar a leer tus libros favoritos?</div>
                 <br />
                 <p className="subtitle">*Todos los campos son obligatorios</p>
@@ -87,8 +100,8 @@ function SignUp() {
                         </button>
                     </div>
                 </div>
-                <div ClassName="copiright">
-                    Copyright <script>document.write(new Date().getFullYear()</script> &copy;
+                <div className="copiright">
+                    Copyright <script>document.write(new Date().getFullYear())</script> &copy;
                 </div>
             </form>
         </div>
