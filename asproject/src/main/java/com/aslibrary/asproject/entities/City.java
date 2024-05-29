@@ -32,4 +32,6 @@ public class City {
         this.cityName = cityName;
     }
 
+    public void setName(String name) {
+    }
 }

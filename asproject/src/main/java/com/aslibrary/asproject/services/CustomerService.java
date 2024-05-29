@@ -1,13 +1,14 @@
 package com.aslibrary.asproject.services;
 
-import com.aslibrary.asproject.entities.Customer;
-import com.aslibrary.asproject.repositories.CustomerRepository;
+import com.aslibrary.asproject.dto.CustomerDTO;
+import com.aslibrary.asproject.entities.*;
+import com.aslibrary.asproject.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,19 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
+    private CountryRepository countryRepository;
+
+    @Autowired
+    private GenderRepository genderRepository;
+
+    @Autowired
+    private OccupationRepository occupationRepository;
+
 
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
@@ -30,28 +44,59 @@ public class CustomerService {
 
     @Transactional
     public ResponseEntity<String> updateCustomerData(Integer customerId, Customer updatedCustomer) {
-        Optional<Customer> existingCustomerOpt = customerRepository.findById(customerId);
-
-        if (!existingCustomerOpt.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El cliente con ID " + customerId + " no existe.");
+        if (!customerRepository.existsById(customerId)) {
+            return ResponseEntity.badRequest().body("El cliente con ID " + customerId + " no existe.");
         }
 
-        Customer existingCustomer = existingCustomerOpt.get();
+        Customer existingCustomer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found"));
+
         existingCustomer.setName(updatedCustomer.getName());
-        existingCustomer.setIdOccupation(updatedCustomer.getIdOccupation());
+        existingCustomer.setAge(updatedCustomer.getAge());
         existingCustomer.setIdCity(updatedCustomer.getIdCity());
         existingCustomer.setIdCountry(updatedCustomer.getIdCountry());
-        existingCustomer.setAge(updatedCustomer.getAge());
         existingCustomer.setIdGender(updatedCustomer.getIdGender());
-        existingCustomer.setIdMemberCard(updatedCustomer.getIdMemberCard());
+        existingCustomer.setIdOccupation(updatedCustomer.getIdOccupation());
 
         customerRepository.save(existingCustomer);
 
         return ResponseEntity.ok("Datos del cliente actualizados con éxito.");
     }
 
-    public ResponseEntity<Customer> createCustomer(Customer customer) {
-        Customer customerSaved = customerRepository.save(customer);
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerSaved);
+    @Transactional
+    public Customer createCustomer(CustomerDTO customerDTO) {
+        Customer customer = new Customer();
+        customer.setName(customerDTO.getName());
+        customer.setAge(customerDTO.getAge());
+
+        // Cargar y asociar City
+        City city = cityRepository.findById(customerDTO.getIdCity())
+                .orElseThrow(() -> new RuntimeException("City not found"));
+        customer.setIdCity(city.getId());
+
+        // Cargar y asociar Country
+        Country country = countryRepository.findById(customerDTO.getIdCountry())
+                .orElseThrow(() -> new RuntimeException("Country not found"));
+        customer.setIdCountry(country.getId());
+
+        // Cargar y asociar Gender
+        Gender gender = genderRepository.findById(customerDTO.getIdGender())
+                .orElseThrow(() -> new RuntimeException("Gender not found"));
+        customer.setIdGender(gender.getId());
+
+        // Cargar y asociar Occupation
+        Occupation occupation = occupationRepository.findById(customerDTO.getIdOccupation())
+                .orElseThrow(() -> new RuntimeException("Occupation not found"));
+        customer.setIdOccupation(occupation.getId());
+
+        customer.setEmail(customerDTO.getEmail());
+        customer.setBirthdate(Date.valueOf(customerDTO.getBirthdate()));
+        customer.setPassword(customerDTO.getPassword());
+
+
+        customer.setIdMemberCard(null);
+
+
+        return customerRepository.save(customer);
     }
+
 }

@@ -32,4 +32,6 @@ public class Occupation {
         this.occupationName = occupationName;
     }
 
+    public void setName(String name) {
+    }
 }

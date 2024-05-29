@@ -1,18 +1,10 @@
 package com.aslibrary.asproject.entities;
-import com.aslibrary.asproject.entities.Customer;
-import com.aslibrary.asproject.services.CustomerService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import com.aslibrary.asproject.entities.Customer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "Customer")
@@ -24,61 +16,42 @@ public class Customer {
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "Name", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Id_Occupation", nullable = false)
-    private Occupation idOccupation;
+    @Column(name = "id_occupation", nullable = false)
+    private Integer idOccupation;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Id_City", nullable = false)
-    private City idCity;
+    @Column(name = "id_city", nullable = false)
+    private Integer idCity;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Id_Country", nullable = false)
-    private Country idCountry;
+    @Column(name = "id_country", nullable = false)
+    private Integer idCountry;
 
     @NotNull
-    @Column(name = "Age", nullable = false)
+    @Column(name = "age", nullable = false)
     private Integer age;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Id_Gender", nullable = false)
-    private Gender idGender;
+    @Column(name = "id_gender", nullable = false)
+    private Integer idGender;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Id_Member_Card", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "id_member_card", nullable = true)
     private MemberCard idMemberCard;
 
+    @Column(name = "email", nullable = true, unique = true)
+    private String email;
 
+    @Column(name = "birthdate", nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date birthdate;
 
-    @RestController
-    @RequestMapping("/api/customers")
-    public class CustomerController {
-
-        @Autowired
-        private CustomerService customerService;
-
-        @PostMapping("/{customerId}/update")
-        public ResponseEntity<String> updateCustomerData(
-                @PathVariable Integer customerId,
-                @RequestBody @Valid Customer updatedCustomer) {
-
-            if (!customerService.existsById(customerId)) {
-                return ResponseEntity.badRequest().body("El cliente con ID " + customerId + " no existe.");
-            }
-
-            customerService.updateCustomerData(customerId, updatedCustomer);
-
-            return ResponseEntity.ok("Datos del cliente actualizados con éxito.");
-        }
-    }
+    @Column(name = "password", nullable = true)
+    private String password;
 
     public Integer getId() {
         return id;
@@ -96,27 +69,27 @@ public class Customer {
         this.name = name;
     }
 
-    public Occupation getIdOccupation() {
+    public Integer getIdOccupation() {
         return idOccupation;
     }
 
-    public void setIdOccupation(Occupation idOccupation) {
+    public void setIdOccupation(Integer idOccupation) {
         this.idOccupation = idOccupation;
     }
 
-    public City getIdCity() {
+    public Integer getIdCity() {
         return idCity;
     }
 
-    public void setIdCity(City idCity) {
+    public void setIdCity(Integer idCity) {
         this.idCity = idCity;
     }
 
-    public Country getIdCountry() {
+    public Integer getIdCountry() {
         return idCountry;
     }
 
-    public void setIdCountry(Country idCountry) {
+    public void setIdCountry(Integer idCountry) {
         this.idCountry = idCountry;
     }
 
@@ -128,11 +101,11 @@ public class Customer {
         this.age = age;
     }
 
-    public Gender getIdGender() {
+    public Integer getIdGender() {
         return idGender;
     }
 
-    public void setIdGender(Gender idGender) {
+    public void setIdGender(Integer idGender) {
         this.idGender = idGender;
     }
 
@@ -144,5 +117,28 @@ public class Customer {
         this.idMemberCard = idMemberCard;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
 
