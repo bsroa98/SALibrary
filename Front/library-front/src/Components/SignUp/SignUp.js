@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../Styles/SignUp.css';
 
@@ -18,6 +19,8 @@ function SignUp() {
 
     const [formData, setFormData] = useState(initialState);
     const [formErrors, setFormErrors] = useState({});
+    const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate();
 
     const cities = [
         { id: 1, name: 'Bogota' }
@@ -90,10 +93,9 @@ function SignUp() {
             const apiData = mapFormDataToApiData(formData);
             const response = await axios.post('http://localhost:80/api/customers/create', apiData);
             console.log('User registered:', response.data);
-            // You can add logic here to redirect the user or show a success message
+            setShowPopup(true);
         } catch (error) {
             console.error('There was an error registering the user!', error);
-            // You can add logic here to handle the error, such as showing a message to the user
         }
     };
 
@@ -104,6 +106,7 @@ function SignUp() {
                 <br />
                 <p className="subtitle">*Todos los campos son obligatorios</p>
                 <div className="bodysign">
+                    {/* Form fields */}
                     <div className="form-group">
                         <input
                             type="text"
@@ -257,6 +260,16 @@ function SignUp() {
                     Copyright <script>document.write(new Date().getFullYear())</script> &copy;
                 </div>
             </form>
+            {showPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h3>Registro exitoso</h3>
+                        <p>Tu cuenta ha sido creada exitosamente.</p>
+                        <button onClick={() => navigate('/LogIn')} className="btn btn-success">¿Quieres iniciar sesión?</button>
+                        <button onClick={() => navigate('/Shop')} className="btn btn-success">¿Quieres ir a comprar libros?</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

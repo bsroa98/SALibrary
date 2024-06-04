@@ -42,6 +42,10 @@ public class CustomerService {
         return customerRepository.existsById(customerId);
     }
 
+    public boolean validateCustomer(String email, String password) {
+        Customer customer = customerRepository.findByEmail(email);
+        return customer != null && customer.getPassword().equals(password);
+    }
     @Transactional
     public ResponseEntity<String> updateCustomerData(Integer customerId, Customer updatedCustomer) {
         if (!customerRepository.existsById(customerId)) {
