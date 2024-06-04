@@ -1,5 +1,6 @@
 package com.aslibrary.asproject.dto;
 
+import com.aslibrary.asproject.entities.Customer;
 import com.azure.spring.data.cosmos.core.mapping.Container;
 import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,8 +13,9 @@ public class PurchaseDTO {
     @Id
     private String id;
 
-    @JsonProperty("userId")
-    private Integer userId;
+    @JsonProperty("customer")
+    private CustomerDTO customer;
+
 
     @PartitionKey
     @JsonProperty("purchaseValue")
@@ -24,9 +26,9 @@ public class PurchaseDTO {
         this.id = UUID.randomUUID().toString();
     }
 
-    public PurchaseDTO(Integer userId, double purchaseValue) {
+    public PurchaseDTO(CustomerDTO customer, double purchaseValue) {
         this.id = UUID.randomUUID().toString();
-        this.userId = userId;
+        this.customer = customer;
         this.purchaseValue = purchaseValue;
     }
 
@@ -38,12 +40,12 @@ public class PurchaseDTO {
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public CustomerDTO getCustomer() {
+        return customer;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setCustomer(CustomerDTO customer) {
+        this.customer = customer;
     }
 
     public double getPurchaseValue() {

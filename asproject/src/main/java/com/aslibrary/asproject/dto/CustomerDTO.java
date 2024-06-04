@@ -12,6 +12,14 @@ public class CustomerDTO {
     private String birthdate;
     private String password;
 
+    public CustomerDTO(String name, int age, int idCity, int idCountry, int idGender) {
+        this.name = name;
+        this.age = age;
+        this.idCity = idCity;
+        this.idCountry = idCountry;
+        this.idGender = idGender;
+    }
+
     public String getName() {
         return name;
     }
