@@ -2,6 +2,7 @@ package com.aslibrary.asproject.controller;
 
 import com.aslibrary.asproject.dto.PurchaseDTO;
 import com.aslibrary.asproject.dto.CustomerDTO;
+import com.aslibrary.asproject.entities.Book;
 import com.aslibrary.asproject.services.*;
 import com.aslibrary.asproject.dto.Cart;
 import com.aslibrary.asproject.entities.Customer;
@@ -15,6 +16,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/buy")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BookPurchaseController {
     @Autowired
     private BookPurchaseService bookPurchaseService;
@@ -31,6 +33,9 @@ public class BookPurchaseController {
     @Autowired
     private IpAddressService ipAddressService;
 
+    @Autowired
+    private BookService bookService;
+
     @PostMapping("/book/")
     public ResponseEntity<String> carPayment(@RequestBody List<Cart> cart, HttpServletRequest request) {
         double totalPrice = 0;
@@ -42,7 +47,14 @@ public class BookPurchaseController {
         for (Cart item : cart) {
             try {
                 bookPurchaseService.buyBook(item.getQuantity(), item.getBookId(), item.getCustomerId());
-                totalPrice += 70000 * item.getBookId();
+                Optional<Book> optionalBook=bookService.findBookById(item.getBookId());
+                if (optionalBook.isPresent()){
+                    Book book = optionalBook.get();
+                    totalPrice += book.getPrice() * item.getQuantity();
+                }
+                else{
+                    return ResponseEntity.badRequest().body("Error Libro no encontrado");
+                }
                 bookIds.add(String.valueOf(item.getBookId()));
                 uniqueCustomerIds.add(String.valueOf(item.getCustomerId()));
             } catch (Exception e) {

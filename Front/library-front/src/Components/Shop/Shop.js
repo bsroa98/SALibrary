@@ -103,11 +103,16 @@ function Shop() {
 
 
   const addToCart = (product) => {
-    if (cartItems.find((p)=>p.id===product.id)==null){
-      setCartItems([...cartItems, product]);
-    }
-    else {
-      product.quantity +=1;
+    const existingProduct = cartItems.find((p) => p.id === product.id);
+    if (existingProduct) {
+      // Si el producto ya está en el carrito, incrementa su cantidad
+      const updatedCartItems = cartItems.map((p) =>
+          p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
+      );
+      setCartItems(updatedCartItems);
+    } else {
+      // Si el producto no está en el carrito, añádelo con cantidad 1
+      setCartItems([...cartItems, { ...product, quantity: 1 }]);
     }
   };
 
