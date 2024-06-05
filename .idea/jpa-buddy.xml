@@ -3,6 +3,8 @@
   <component name="JpaBuddyIdeaProjectConfig" ddlActionDbType="mssql" newRepositoryParent="org.springframework.data.jpa.repository.JpaRepository">
     <option name="defaultUnitInitialized" value="true" />
     <option name="renamerInitialized" value="true" />
+    <option name="sourceModelValue" value="Default" />
+    <option name="targetDbValue" value="d44188cd-1c24-478f-8d99-da2b008f06a5" />
     <option name="reverseEngineeringLastDbConnectionId" value="d5bb01b4-4585-4010-bc85-c1b25b83b12a" />
     <option name="reLastEntityCreationPackage" value="asproject/src/main/java/com/aslibrary/asproject/entities" />
   </component>

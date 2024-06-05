@@ -17,19 +17,17 @@ function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIte
     };
 
     const handleCheckout = async () => {
-        const total = calculateTotal();
-        const paymentData = {
-            customerId: customerInfo.customerId,
-            membershipId: customerInfo.membershipId,
-            items: cartItems.map(item => ({
-                bookId: item.id,
-                quantity: item.quantity
-            })),
-            totalAmount: total
-        };
+        const paymentData = cartItems.map(item => ({
+            bookId: item.id,
+            quantity: item.quantity,
+            customerId: customerInfo.customerId
+        }));
+
+        console.log('Payment data:', JSON.stringify(paymentData, null, 2));
 
         try {
-            const response = await axios.post('http://localhost:80/api/buy/payment', paymentData);
+            const response = await axios.post('http://localhost:80/api/buy/book/', paymentData);
+            console.log('Response:', response);
             if (response.status === 200) {
                 alert('Payment successful');
                 setCartItems([]); // Clear the cart after successful payment
@@ -38,9 +36,11 @@ function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIte
             }
         } catch (error) {
             console.error('Payment error', error);
+            console.error('Payment error', error);
             alert('Payment error');
         }
     };
+
 
     const incrementQuantity = (itemId) => {
         const updatedCartItems = cartItems.map((item) => {
@@ -133,15 +133,6 @@ function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIte
                                                 placeholder="Ingrese ID del Cliente"
                                                 value={customerInfo.customerId}
                                                 onChange={(e) => setCustomerInfo({ ...customerInfo, customerId: e.target.value })}
-                                            />
-                                        </Form.Group>
-                                        <Form.Group controlId="membershipId">
-                                            <Form.Label>ID de Membresía</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Ingrese ID de Membresía"
-                                                value={customerInfo.membershipId}
-                                                onChange={(e) => setCustomerInfo({ ...customerInfo, membershipId: e.target.value })}
                                             />
                                         </Form.Group>
                                         <Button variant="primary" onClick={handleCheckout}>

@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/buy")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BookPurchaseController {
     @Autowired
     private BookPurchaseService bookPurchaseService;
