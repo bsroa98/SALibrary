@@ -30,8 +30,11 @@ function App() {
         }
         try {
             const response = await axios.post(`http://localhost:80/api/membercard/generate/${userId}`, userId);
-            setMemberCard(response.data);
-            // const response = await axios.put(`http://localhost:80/api/membercard/generate/${userId}`, userId);
+            console.log('response.data', response.data);
+            const newMemberCard = response.data;
+            console.log('newMemberCard', newMemberCard);
+            await axios.put(`http://localhost:80/api/customers/${userId}/update-member-card`, {idMemberCard: newMemberCard.id});
+            setMemberCard(newMemberCard);
         } catch (error) {
             console.error("Error generating member card", error);
         }

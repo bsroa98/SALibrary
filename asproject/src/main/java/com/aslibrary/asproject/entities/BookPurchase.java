@@ -71,4 +71,7 @@ public class BookPurchase {
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
+
+    public void setClientIp(String clientIp) {
+    }
 }

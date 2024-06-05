@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './App/App';
 
 function Cart({ onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartItems }) {
+    const token = "?sp=r&st=2024-06-04T16:00:11Z&se=2024-06-13T00:00:11Z&sv=2022-11-02&sr=c&sig=6oolhHY5Gxx3atdaLKxpOB6ui5r8793awbTc4QEjKNA%3D"
     const [customerInfo, setCustomerInfo] = useState({
         customerId: '',
         membershipId: ''
@@ -86,7 +87,7 @@ function Cart({ onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIt
                             <tr key={item.id}>
                                 <th scope="row">
                                     <div className="d-flex align-items-center">
-                                        <img src={item.url} className="img-fluid rounded-3" style={{ width: "120px" }} alt="Book" />
+                                        <img src={item.urlimage+token} className="img-fluid rounded-3" style={{ width: "120px" }} alt="Book" />
                                         <div className="flex-column ms-4">
                                             <p className="mb-2">{item.name}</p>
                                             <p className="mb-0">Autor: {item.author}</p>

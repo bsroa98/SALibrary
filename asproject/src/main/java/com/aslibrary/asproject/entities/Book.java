@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 public class Book {
@@ -38,6 +38,15 @@ public class Book {
     @Size(max = 100)
     @Column(name = "Author", length = 100)
     private String Author;
+
+    @Size(max = 100)
+
+    @Column(name = "genre", nullable = false, length = 100)
+    private String genre;
+
+    @Column(name = "publication_date", nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date PublicationDate;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_country", nullable = false)
@@ -105,5 +114,22 @@ public class Book {
 
     public void setIdCountry(Country idCountry) {
         this.idCountry = idCountry;
+    }
+
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public Date getPublicationDate() {
+        return PublicationDate;
+    }
+
+    public void setPublicationDate(Date publicationDate) {
+        PublicationDate = publicationDate;
     }
 }

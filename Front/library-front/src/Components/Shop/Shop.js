@@ -9,62 +9,37 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { IoFilter } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import '../../Styles/Shop.css';
-
-
+import axios from "axios";
 
 function Shop() {
-  const url = "https://aslibrarystorage.blob.core.windows.net/bookimages?sp=r&st=2024-04-22T20:50:55Z&se=2024-04-29T04:57:55Z&skoid=8608da46-50a7-44a0-a5ad-9bde91dea05b&sktid=d4227148-4930-4f06-8baa-0845ff57e541&skt=2024-04-22T20:50:55Z&ske=2024-04-29T04:57:55Z&sks=b&skv=2022-11-02&sv=2022-11-02&sr=c&sig=7K901C3MdIgfYpWkZtsRpte6EHep%2Fqp%2FpoBr%2Byp5nsg%3D";
-  const partes = url.split("?");
-  const urlRecurso = partes[0];
-  const token = partes[1];
+  const token = "?sp=r&st=2024-06-04T16:00:11Z&se=2024-06-13T00:00:11Z&sv=2022-11-02&sr=c&sig=6oolhHY5Gxx3atdaLKxpOB6ui5r8793awbTc4QEjKNA%3D"
 
-  const allProducts = [{
-    id: 3,
-    name: "Dracula",
-    author: "Bram Stoker",
-    price: 70000,
-    url: `${urlRecurso}/DraculaBook.webp?${token}`,
-    quantity: 1,
-    isbn : "9789583054891",
-    genre: "Terror",
-    publicationDate: "1897-05-26"
-  },
-    {
-      id: 1,
-      name: "HabitosAtomicos",
-      author: "James Clear",
-      price: 100000,
-      url: `${urlRecurso}/HabitosAtomicosBook.jpg?${token}`,
-      quantity: 1,
-      isbn : "9789584277954",
-      genre: "Autoayuda",
-      publicationDate: "2018-10-16"
-    },
-    {
-      id: 2,
-      name: "Orgullo y Prejuicio",
-      author: "Jane Austen",
-      price: 80000,
-      url: `${urlRecurso}/OrgYPrejBook.webp?${token}`,
-      quantity: 1,
-      isbn : "9789585285330",
-      genre: "Clásico",
-      publicationDate: "1813-01-28"
-    },
-    {
-      id: 5,
-      name: "Arte de la Guerra",
-      author: "Sun Tzu",
-      price: 70000,
-      url: `${urlRecurso}/arte de la guerra.jpeg?${token}`,
-      quantity: 1,
-      isbn : "9789583054",
-      genre: "Estrategia",
-      publicationDate: "500 AC"
-    }]
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    async function fetchBooks() {
+      try {
+        const response = await axios.get('http://localhost/api/book');
+        setBooks(response.data);
+        console.log(books)
+      } catch (error) {
+        console.error('Error al obtener los libros:', error);
+      }
+    }
+
+    fetchBooks();
+
+
+  }, []);
+  useEffect(() => {
+
+    setProductItems(books);
+  }, [books]);
+
+
 
   const [cartItems, setCartItems] = useState([]);
-  const [productItems, setProductItems] = useState([...allProducts]);
+  const [productItems, setProductItems] = useState([...books]);
   const [showCart, setShowCart] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [searchHistory, setSearchHistory] = useState([]);
@@ -84,8 +59,8 @@ function Shop() {
   const handleSearch = () => {
     const searchTerm = searchInput.toLowerCase();
 
-    const searchResults = allProducts.filter((item) => {
-      const nameMatch = item.name.toLowerCase().includes(searchTerm);
+    const searchResults = books.filter((item) => {
+      const nameMatch = item.title.toLowerCase().includes(searchTerm);
       const isbnMatch = item.isbn && item.isbn.toLowerCase().includes(searchTerm);
       const authorMatch = item.author.toLowerCase().includes(searchTerm);
       return nameMatch || isbnMatch || authorMatch;
@@ -127,11 +102,16 @@ function Shop() {
 
 
   const addToCart = (product) => {
-    if (cartItems.find((p)=>p.id===product.id)==null){
-      setCartItems([...cartItems, product]);
-    }
-    else {
-      product.quantity +=1;
+    const existingProduct = cartItems.find((p) => p.id === product.id);
+    if (existingProduct) {
+      // Si el producto ya está en el carrito, incrementa su cantidad
+      const updatedCartItems = cartItems.map((p) =>
+          p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
+      );
+      setCartItems(updatedCartItems);
+    } else {
+      // Si el producto no está en el carrito, añádelo con cantidad 1
+      setCartItems([...cartItems, { ...product, quantity: 1 }]);
     }
   };
 
@@ -235,14 +215,14 @@ function Shop() {
 
         <div className="contenido">
           <section className="product">
-            {productItems.map((item) => (
-                <div className="productcard" key={item.id}>
-                    <img src={item.url} alt="accesorio"/>
-                    <h3>{item.name}</h3>
-                    <p>Price: {item.price}</p>
-                    <p>Author: {item.author}</p>
-                    <p>Gender: {item.genre}</p>
-                    <button className="btn btn-primary btn-block" onClick={() => addToCart(item)}>Add to Cart</button>
+            {productItems.map((books) => (
+                <div className="productcard" key={books.id}>
+                    <img src={books.urlimage+token} alt="accesorio"/>
+                    <h3>{books.title}</h3>
+                    <p>Price: {books.price}</p>
+                    <p>Author: {books.author}</p>
+                    <p>Gender: {books.genre}</p>
+                    <button className="btn btn-primary btn-block" onClick={() => addToCart(books)}>Add to Cart</button>
                 </div>
             ))}
           </section>

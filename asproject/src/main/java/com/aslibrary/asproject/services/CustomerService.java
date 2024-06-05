@@ -29,6 +29,8 @@ public class CustomerService {
     @Autowired
     private OccupationRepository occupationRepository;
 
+    @Autowired
+    private MemberCardRepository memberCardRepository;
 
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
@@ -72,6 +74,24 @@ public class CustomerService {
     }
 
     @Transactional
+    public ResponseEntity<String> updateMemberCard(Integer customerId, Integer memberCardId) {
+        if (!customerRepository.existsById(customerId)) {
+            return ResponseEntity.badRequest().body("El cliente con ID " + customerId + " no existe.");
+        }
+
+        Customer existingCustomer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        MemberCard memberCard = memberCardRepository.findById(memberCardId)
+                .orElseThrow(() -> new RuntimeException("Member card not found"));
+
+        existingCustomer.setIdMemberCard(memberCard);
+        customerRepository.save(existingCustomer);
+
+        return ResponseEntity.ok("Tarjeta de membresía actualizada con éxito.");
+    }
+
+    @Transactional
     public Customer createCustomer(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setName(customerDTO.getName());
@@ -101,11 +121,8 @@ public class CustomerService {
         customer.setBirthdate(Date.valueOf(customerDTO.getBirthdate()));
         customer.setPassword(customerDTO.getPassword());
 
-
         customer.setIdMemberCard(null);
-
 
         return customerRepository.save(customer);
     }
-
 }

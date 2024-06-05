@@ -21,14 +21,14 @@
     height: 95%;
     max-width: 35%;
     position: fixed;
-    top: 20px; /* Ajusta la distancia desde la parte superior */
-    right: 20px; /* Ajusta la distancia desde la derecha */
-    z-index: 1000; /* Asegura que esté por encima del contenido pero debajo del encabezado y pie de página */
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
 }
 
 .cart {
-    max-height: 80vh; /* Limita la altura para que no se extienda demasiado */
-    overflow-y: auto; /* Agrega desplazamiento si el contenido es demasiado largo */
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .close-button {
@@ -53,10 +53,10 @@
 }
 
 .checkout-section .form-group {
-    margin-bottom: 20px; /* Agrega 20px de margen inferior entre cada Form.Group */
+    margin-bottom: 20px;
 }
 
 .checkout-section .btn {
-    margin-top: 20px; /* Agrega 20px de margen superior al botón */
+    margin-top: 20px;
 }
 
