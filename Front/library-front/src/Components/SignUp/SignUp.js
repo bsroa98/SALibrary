@@ -256,7 +256,7 @@ function SignUp() {
                         </button>
                     </div>
                 </div>
-                <div className="copiright">
+                <div className="copyright">
                     Copyright <script>document.write(new Date().getFullYear())</script> &copy;
                 </div>
             </form>

@@ -27,6 +27,13 @@ body{
     flex-wrap: wrap;
 }
 
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
 .product {
     flex: 3;
     display: grid;
@@ -41,9 +48,13 @@ body{
     text-align: center;
 }
 
-img {
-    max-width: 95%;
-    height: 62%;
+.home-image {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .button {
@@ -118,6 +129,25 @@ ul li {
 
 ul li span {
   margin-right: 10px;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
 }
 
 /* Media queries para ajustar estilos en diferentes tamaños de pantalla */

@@ -42,9 +42,14 @@ public class CustomerService {
         return customerRepository.existsById(customerId);
     }
 
-    public boolean validateCustomer(String email, String password) {
+    public void saveCustomer(Customer customer) { customerRepository.save(customer); }
+
+    public Customer validateCustomer(String email, String password) {
         Customer customer = customerRepository.findByEmail(email);
-        return customer != null && customer.getPassword().equals(password);
+        if (customer != null && customer.getPassword().equals(password)) {
+            return customer;
+        }
+        return null;
     }
     @Transactional
     public ResponseEntity<String> updateCustomerData(Integer customerId, Customer updatedCustomer) {

@@ -40,6 +40,21 @@
     box-sizing: border-box;
 }
 
+.password-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.password-input {
+    flex: 1;
+    margin-right: 5px;
+}
+
+.toggle-password-button {
+    font-size: 12px;
+    padding: 5px 8px;
+}
+
 .register-link {
     margin-bottom: 15px;
 }
@@ -54,12 +69,14 @@ footer {
     padding: 10px;
 }
 
-copyright{
+.copyright{
+    text-align: center;
     color: #ffffff;
 }
 
 .success-message {
-    color: green;
+    background-color: green;
+    color: #ffffff;
     text-align: center;
-    margin-top: 10px;
+    margin-bottom: 0px;
 }

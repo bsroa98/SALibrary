@@ -29,14 +29,19 @@ public class CreateCustomer {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginCustomer(@RequestBody CustomerDTO customerDTO) {
-        boolean isValidUser = customerService.validateCustomer(customerDTO.getEmail(), customerDTO.getPassword());
-        if (isValidUser) {
-            return ResponseEntity.ok("Inicio de sesión exitoso");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+    public ResponseEntity<?> loginCustomer(@RequestBody CustomerDTO customerDTO) {
+        try {
+            Customer customer = customerService.validateCustomer(customerDTO.getEmail(), customerDTO.getPassword());
+            if (customer != null) {
+                return ResponseEntity.ok(customer);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el servidor: " + e.getMessage());
         }
     }
+
 
     @PostMapping("/{customerId}/update")
     public ResponseEntity<String> updateCustomerData(

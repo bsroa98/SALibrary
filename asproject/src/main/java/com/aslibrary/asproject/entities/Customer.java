@@ -43,6 +43,9 @@ public class Customer {
     @JoinColumn(name = "id_member_card", nullable = true)
     private MemberCard idMemberCard;
 
+    @OneToOne(fetch = FetchType.LAZY, optional = true, cascade = CascadeType.ALL, mappedBy = "customer")
+    private MemberCard memberCard;
+
     @Column(name = "email", nullable = true, unique = true)
     private String email;
 
@@ -115,6 +118,14 @@ public class Customer {
 
     public void setIdMemberCard(MemberCard idMemberCard) {
         this.idMemberCard = idMemberCard;
+    }
+
+    public MemberCard getMemberCard() {
+        return memberCard;
+    }
+
+    public void setMemberCard(MemberCard memberCard) {
+        this.memberCard = memberCard;
     }
 
     public String getEmail() {

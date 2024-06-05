@@ -3,28 +3,43 @@ import { Button, Form } from 'react-bootstrap';
 import { CgClose } from "react-icons/cg";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
+import axios from 'axios';
 
-function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems}) {
+function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartItems}) {
     const [customerInfo, setCustomerInfo] = useState({
         customerId: '',
         membershipId: ''
     });
-    const [showCart] = useState(true); // Estado para mostrar/ocultar el carrito
-
-
-
-
+    const [showCart] = useState(true);
 
     const calculateTotal = () => {
         return Object.values(cartItems).reduce((total, item) => total + (item.price * item.quantity), 0);
     };
 
-    const handleCheckout = () => {
-        console.log('Checkout');
-        console.log('Customer ID:', customerInfo.customerId);
-        console.log('Membership ID:', customerInfo.membershipId);
-        console.log('Cart Items:', Object.values(cartItems));
-        console.log('Total:', calculateTotal());
+    const handleCheckout = async () => {
+        const total = calculateTotal();
+        const paymentData = {
+            customerId: customerInfo.customerId,
+            membershipId: customerInfo.membershipId,
+            items: cartItems.map(item => ({
+                bookId: item.id,
+                quantity: item.quantity
+            })),
+            totalAmount: total
+        };
+
+        try {
+            const response = await axios.post('http://localhost:80/api/buy/payment', paymentData);
+            if (response.status === 200) {
+                alert('Payment successful');
+                setCartItems([]); // Clear the cart after successful payment
+            } else {
+                alert('Payment failed');
+            }
+        } catch (error) {
+            console.error('Payment error', error);
+            alert('Payment error');
+        }
     };
 
     const incrementQuantity = (itemId) => {
@@ -47,15 +62,12 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
         setCartItems(updatedCartItems);
     };
 
-
-
     return (
         <div className="cart-overlay">
-            {showCart && ( // Mostrar el carrito solo si showCart es true
+            {showCart && (
                 <div className="cart-container cart">
                     <button className="close-button" onClick={onCloseCart}><CgClose /></button>
                     <h2 className="mb-4">Shopping Cart</h2>
-
                     <table className="table">
                         <thead>
                         <tr>
@@ -80,15 +92,7 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
                                 </th>
                                 <td className="align-middle">
                                     <div className="d-flex flex-row">
-                                        <Button variant="link" className="px-2" onClick={() => onRemoveFromCart(item.id)}>
-                                            <i className="fas fa-minus"></i>
-                                        </Button>
-
-                                        <button
-                                            className="btn btn-link"
-                                            onClick={() => incrementQuantity(item.id)}
-                                        >
-                                            <i className="fas fa-minus"></i>
+                                        <button className="btn btn-link" onClick={() => incrementQuantity(item.id)}>
                                             <IoIosArrowUp />
                                         </button>
                                         <input
@@ -101,17 +105,9 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
                                             style={{ width: "50px" }}
                                             readOnly
                                         />
-                                        <button
-                                            className="btn btn-link"
-                                            onClick={() => decrementQuantity(item.id)}
-                                        >
-                                            <i className="fas fa-minus"></i>
+                                        <button className="btn btn-link" onClick={() => decrementQuantity(item.id)}>
                                             <IoIosArrowDown />
                                         </button>
-
-                                        <Button variant="link" className="px-2" onClick={() => onAddToCart(item)}>
-                                            <i className="fas fa-plus"></i>
-                                        </Button>
                                     </div>
                                 </td>
                                 <td className="align-middle">
@@ -125,47 +121,43 @@ function Cart({onCloseCart,cartItems,onAddToCart,onRemoveFromCart,setCartItems})
                                 </td>
                             </tr>
                         ))}
-                        <tr><div className="checkout-section">
-
-                            <h5>Información del Cliente</h5>
-                            <Form>
-                                <Form.Group controlId="customerId">
-                                    <Form.Label>ID del Cliente</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Ingrese ID del Cliente"
-                                        value={customerInfo.customerId}
-                                        onChange={(e) => setCustomerInfo({ ...customerInfo, customerId: e.target.value })}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group controlId="membershipId">
-                                    <Form.Label>ID de Membresía</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Ingrese ID de Membresía"
-                                        value={customerInfo.membershipId}
-                                        onChange={(e) => setCustomerInfo({ ...customerInfo, membershipId: e.target.value })}
-                                    />
-                                </Form.Group>
-
-                                <Button variant="primary" onClick={handleCheckout}>
-                                    Pagar
-                                </Button>
-                            </Form>
-                        </div></tr>
+                        <tr>
+                            <td colSpan="5">
+                                <div className="checkout-section">
+                                    <h5>Información del Cliente</h5>
+                                    <Form>
+                                        <Form.Group controlId="customerId">
+                                            <Form.Label>ID del Cliente</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Ingrese ID del Cliente"
+                                                value={customerInfo.customerId}
+                                                onChange={(e) => setCustomerInfo({ ...customerInfo, customerId: e.target.value })}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group controlId="membershipId">
+                                            <Form.Label>ID de Membresía</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Ingrese ID de Membresía"
+                                                value={customerInfo.membershipId}
+                                                onChange={(e) => setCustomerInfo({ ...customerInfo, membershipId: e.target.value })}
+                                            />
+                                        </Form.Group>
+                                        <Button variant="primary" onClick={handleCheckout}>
+                                            Pagar
+                                        </Button>
+                                    </Form>
+                                </div>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
-
                     <div className="total-section">
                         <h5>Total: ${calculateTotal().toFixed(2)}</h5>
                     </div>
-
-
-
                 </div>
             )}
-
         </div>
     );
 }

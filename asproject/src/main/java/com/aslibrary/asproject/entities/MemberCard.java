@@ -15,13 +15,12 @@ public class MemberCard {
     private Integer cardNumber;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Id_Customer", nullable = false)
-    private Customer idCustomer;
-
-    @NotNull
     @Column(name = "balance", nullable = false)
     public Double balance;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "Id_Customer", nullable = false)
+    private Customer customer;
 
     public Integer getId() {
         return idMemberCard;
@@ -39,20 +38,20 @@ public class MemberCard {
         this.cardNumber = cardNumber;
     }
 
-    public Customer getIdCustomer() {
-        return idCustomer;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setIdCustomer(Customer idCustomer) {
-        this.idCustomer = idCustomer;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public Double setBalance(Double balance) {
         this.balance = balance;
+        return balance;
     }
-
 }
