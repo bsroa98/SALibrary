@@ -14,7 +14,8 @@ public class CustomerMapperService {
             return null;
         }
         return new CustomerDTO(
-                customer.getName(), customer.getAge(), customer.getIdCity(), customer.getIdCountry(), customer.getIdGender()
+                customer.getName(), customer.getAge(), customer.getIdCity(), customer.getIdCountry(), customer.getIdGender(),
+                customer.getIdOccupation(), customer.getIdMemberCard().getCardNumber(),customer.getEmail()
         );
     }
 
