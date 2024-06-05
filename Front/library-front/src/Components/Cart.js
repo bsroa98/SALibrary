@@ -115,7 +115,7 @@ function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIte
                                     <p className="mb-0" style={{ fontWeight: 500 }}>${item.price}</p>
                                 </td>
                                 <td className="align-middle">
-                                    <p className="mb-0" style={{ fontWeight: 500 }}>${(item.price * item.quantity).toFixed(2)}</p>
+                                    <p className="mb-0" style={{ fontWeight: 500 }}>${(item.price * item.quantity).toFixed(0)}</p>
                                 </td>
                                 <td className="align-middle">
                                     <Button variant="danger" size="sm" onClick={() => onRemoveFromCart(item.id)}>Eliminar</Button>
@@ -146,7 +146,7 @@ function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIte
                         </tbody>
                     </table>
                     <div className="total-section">
-                        <h5>Total: ${calculateTotal().toFixed(2)}</h5>
+                        <h5>Total: ${calculateTotal().toFixed(0)} COP</h5>
                     </div>
                 </div>
             )}
