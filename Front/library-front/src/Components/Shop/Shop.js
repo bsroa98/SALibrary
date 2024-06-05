@@ -219,7 +219,7 @@ function Shop() {
                 <div className="productcard" key={books.id}>
                     <img src={books.urlimage+token} alt="accesorio"/>
                     <h3>{books.title}</h3>
-                    <p>Price: {books.price}</p>
+                    <p>Price: $ {books.price} COP</p>
                     <p>Author: {books.author}</p>
                     <p>Gender: {books.genre}</p>
                     <button className="btn btn-primary btn-block" onClick={() => addToCart(books)}>Add to Cart</button>

@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -33,7 +34,23 @@ public class CreateCustomer {
         try {
             Customer customer = customerService.validateCustomer(customerDTO.getEmail(), customerDTO.getPassword());
             if (customer != null) {
-                return ResponseEntity.ok(customer);
+                CustomerDTO responseDTO = new CustomerDTO(
+                        customer.getId(),
+                        customer.getName(),
+                        customer.getAge(),
+                        customer.getIdCity(),
+                        customer.getIdCountry(),
+                        customer.getIdGender(),
+                        customer.getIdOccupation(),
+                        customer.getIdMemberCard() != null ? customer.getIdMemberCard().getId() : null,
+                        customer.getEmail(),
+                        customer.getBirthdate(),
+                        customer.getPassword()
+                );
+                responseDTO.setId(customer.getId());
+                responseDTO.setEmail(customer.getEmail());
+                responseDTO.setName(customer.getName());
+                return ResponseEntity.ok(responseDTO);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
             }
@@ -42,7 +59,6 @@ public class CreateCustomer {
         }
     }
 
-
     @PostMapping("/{customerId}/update")
     public ResponseEntity<String> updateCustomerData(
             @PathVariable Integer customerId,
@@ -50,5 +66,12 @@ public class CreateCustomer {
 
         return customerService.updateCustomerData(customerId, updatedCustomer);
     }
-}
 
+    @PutMapping("/{customerId}/update-member-card")
+    public ResponseEntity<String> updateMemberCard(
+            @PathVariable Integer customerId,
+            @RequestBody Map<String, Integer> request) {
+        Integer memberCardId = request.get("idMemberCard");
+        return customerService.updateMemberCard(customerId, memberCardId);
+    }
+}

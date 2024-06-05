@@ -2,6 +2,7 @@ package com.aslibrary.asproject.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class MemberCard {
@@ -18,8 +19,10 @@ public class MemberCard {
     @Column(name = "balance", nullable = false)
     public Double balance;
 
+    @OneToOne
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Id_Customer", nullable = false)
+    @JsonBackReference
     private Customer customer;
 
     public Integer getId() {

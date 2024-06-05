@@ -3,11 +3,15 @@ package com.aslibrary.asproject.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "Customer")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +45,11 @@ public class Customer {
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "id_member_card", nullable = true)
+    @JsonIgnore
     private MemberCard idMemberCard;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true, cascade = CascadeType.ALL, mappedBy = "customer")
+    @JsonManagedReference
     private MemberCard memberCard;
 
     @Column(name = "email", nullable = true, unique = true)

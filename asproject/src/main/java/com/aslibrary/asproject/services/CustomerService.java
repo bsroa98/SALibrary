@@ -118,7 +118,7 @@ public class CustomerService {
         customer.setIdOccupation(occupation.getId());
 
         customer.setEmail(customerDTO.getEmail());
-        customer.setBirthdate(Date.valueOf(customerDTO.getBirthdate()));
+        customer.setBirthdate(customerDTO.getBirthdate());
         customer.setPassword(customerDTO.getPassword());
 
         customer.setIdMemberCard(null);
