@@ -30,51 +30,45 @@ public class BookPurchaseService {
     private CustomerService customerService;
 
     @Autowired
-    public BookPurchaseService(BookPurchaseRepository bookPurchaseRepository, BookService bookService,CustomerService customerService) {
+    public BookPurchaseService(BookPurchaseRepository bookPurchaseRepository, BookService bookService, CustomerService customerService) {
         this.bookPurchaseRepository = bookPurchaseRepository;
         this.bookService = bookService;
         this.customerService = customerService;
     }
 
-    public BookPurchase saveBookPurchase(Book book,Customer customer, MemberCard customerCard,Integer quantity){
+    public BookPurchase saveBookPurchase(Book book, Customer customer, MemberCard customerCard, Integer quantity) {
         BookPurchase savedBookPurchase = new BookPurchase();
         savedBookPurchase.setIdBook(book);
         savedBookPurchase.setIdCustomer(customer);
         savedBookPurchase.setIdMemberCard(customerCard.getId());
-        savedBookPurchase.setTotalPrice(book.getPrice()*quantity);
+        savedBookPurchase.setTotalPrice(book.getPrice() * quantity);
         bookPurchaseRepository.save(savedBookPurchase);
         return savedBookPurchase;
     }
 
     @Transactional
-    public void buyBook(Integer quantity,Integer bookId, Integer idCustomer) {
+    public void buyBook(Integer quantity, Integer bookId, Integer idCustomer) {
         Optional<Customer> optionalCustomer = customerService.findById(idCustomer);
         Optional<Book> optionalBook = bookService.findBookById(bookId);
-        if (optionalCustomer.isPresent() && optionalBook.isPresent()){
+        if (optionalCustomer.isPresent() && optionalBook.isPresent()) {
             Customer customer = optionalCustomer.get();
             MemberCard customerCard = customer.getIdMemberCard();
             Book book = optionalBook.get();
-            if (book.getStock()>=quantity) {
-                if (customerCard.getBalance() < book.getPrice()*quantity) {
+            if (book.getStock() >= quantity) {
+                if (customerCard.getBalance() < book.getPrice() * quantity) {
                     throw new RuntimeException("Out of credit");
                 }
-                    BookPurchase bookPurchase = saveBookPurchase(book,customer,customerCard,quantity);
-                    Integer stock = book.getStock()-quantity;
-                    book.setStock(stock);
-                    customerCard.setBalance(customerCard.getBalance() - bookPurchase.getTotalPrice());
-                    bookService.saveBook(book);
-                    memberCardService.saveCard(customerCard);
-            }
-            else{
+                BookPurchase bookPurchase = saveBookPurchase(book, customer, customerCard, quantity);
+                book.setStock(book.getStock() - quantity);
+                customerCard.setBalance(customerCard.getBalance() - bookPurchase.getTotalPrice());
+                bookService.saveBook(book);
+                memberCardService.saveCard(customerCard);
+            } else {
                 throw new RuntimeException("Out of Stock");
             }
-        }
-        else {
+        } else {
             throw new RuntimeException("DataNotFound");
         }
-
     }
-
-
 }
 

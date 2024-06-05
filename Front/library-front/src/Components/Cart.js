@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { CgClose } from "react-icons/cg";
-import { IoIosArrowUp } from "react-icons/io";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './App/App';
 
-function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartItems}) {
+function Cart({ onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartItems }) {
     const [customerInfo, setCustomerInfo] = useState({
         customerId: '',
         membershipId: ''
     });
     const [showCart] = useState(true);
+    const { isAuthenticated } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const calculateTotal = () => {
         return Object.values(cartItems).reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -19,8 +22,8 @@ function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIte
     const handleCheckout = async () => {
         const total = calculateTotal();
         const paymentData = {
-            customerId: customerInfo.customerId,
-            membershipId: customerInfo.membershipId,
+            customerId: parseInt(customerInfo.customerId),
+            membershipId: parseInt(customerInfo.membershipId),
             items: cartItems.map(item => ({
                 bookId: item.id,
                 quantity: item.quantity
@@ -32,7 +35,7 @@ function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIte
             const response = await axios.post('http://localhost:80/api/buy/payment', paymentData);
             if (response.status === 200) {
                 alert('Payment successful');
-                setCartItems([]); // Clear the cart after successful payment
+                setCartItems([]);
             } else {
                 alert('Payment failed');
             }
@@ -123,32 +126,46 @@ function Cart({onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIte
                         ))}
                         <tr>
                             <td colSpan="5">
-                                <div className="checkout-section">
-                                    <h5>Información del Cliente</h5>
-                                    <Form>
-                                        <Form.Group controlId="customerId">
-                                            <Form.Label>ID del Cliente</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Ingrese ID del Cliente"
-                                                value={customerInfo.customerId}
-                                                onChange={(e) => setCustomerInfo({ ...customerInfo, customerId: e.target.value })}
-                                            />
-                                        </Form.Group>
-                                        <Form.Group controlId="membershipId">
-                                            <Form.Label>ID de Membresía</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Ingrese ID de Membresía"
-                                                value={customerInfo.membershipId}
-                                                onChange={(e) => setCustomerInfo({ ...customerInfo, membershipId: e.target.value })}
-                                            />
-                                        </Form.Group>
-                                        <Button variant="primary" onClick={handleCheckout}>
-                                            Pagar
-                                        </Button>
-                                    </Form>
-                                </div>
+                                {isAuthenticated ? (
+                                    <div className="checkout-section">
+                                        <h5>Información del Cliente</h5>
+                                        <Form>
+                                            <Form.Group controlId="customerId">
+                                                <Form.Label>ID del Cliente</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Ingrese ID del Cliente"
+                                                    value={customerInfo.customerId}
+                                                    onChange={(e) => setCustomerInfo({ ...customerInfo, customerId: e.target.value })}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group controlId="membershipId">
+                                                <Form.Label>ID de Membresía</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Ingrese ID de Membresía"
+                                                    value={customerInfo.membershipId}
+                                                    onChange={(e) => setCustomerInfo({ ...customerInfo, membershipId: e.target.value })}
+                                                />
+                                            </Form.Group>
+                                            <Button variant="primary" onClick={handleCheckout}>
+                                                Pagar
+                                            </Button>
+                                        </Form>
+                                    </div>
+                                ) : (
+                                    <div className="auth-section">
+                                        <p>Para continuar con el pago, por favor
+                                            <button onClick={() => navigate('/LogIn')} style={{ background: 'none', border: 'none', color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
+                                                Inicia sesión
+                                            </button>
+                                            o
+                                            <button onClick={() => navigate('/SignUp')} style={{ background: 'none', border: 'none', color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
+                                                Regístrate
+                                            </button>.
+                                        </p>
+                                    </div>
+                                )}
                             </td>
                         </tr>
                         </tbody>
