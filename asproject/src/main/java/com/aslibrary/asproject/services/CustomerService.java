@@ -126,6 +126,16 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+    @Transactional
+    public boolean deleteCustomerByEmail(String email) {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer != null) {
+            customerRepository.delete(customer);
+            return true;
+        }
+        return false;
+    }
+
     public Customer findByEmail(String email) {
         return customerRepository.findByEmail(email);
     }

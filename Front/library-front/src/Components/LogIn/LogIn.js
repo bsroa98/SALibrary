@@ -9,7 +9,7 @@ function LogIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState(false);
+    const [attempts, setAttempts] = useState(0);
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
@@ -20,28 +20,39 @@ function LogIn() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:80/api/customers/login', {
+                email,
+                password
+            });
+            const userData = response.data;
+            setUserId(userData.id);
+            setUserName(userData.name);
+            setIsAuthenticated(true);
+
+            if (userData.idMemberCard) {
+                const cardResponse = await axios.get(`http://localhost:80/api/membercard/customer/${userData.id}`);
+                setMemberCard(cardResponse.data);
+            } else {
+                setMemberCard(null);
+            }
+
+            navigate('/Shop');
+        } catch (error) {
+            console.error('Error during login:', error);
+            setAttempts(attempts + 1);
+
+            if (attempts >= 2) {
                 try {
-                    const response = await axios.post('http://localhost:80/api/customers/login', {
-                        email,
-                        password
-                    });
-                    const userData = response.data;
-                    setUserId(userData.id);
-                    setUserName(userData.name);
-                    setIsAuthenticated(true);
-
-                    if (userData.idMemberCard) {
-                        const cardResponse = await axios.get(`http://localhost:80/api/membercard/customer/${userData.id}`);
-                        setMemberCard(cardResponse.data);
-                    } else {
-                        setMemberCard(null);
-                    }
-
-                    navigate('/Shop');
-                } catch (error) {
-                    console.error('Error during login:', error);
-                    setError('Login failed. Please try again.');
+                    await axios.delete(`http://localhost:80/api/customers/delete`, { data: { email } });
+                    setError('Usuario eliminado por múltiples intentos fallidos.');
+                } catch (deleteError) {
+                    setError('Error eliminando el usuario: ' + deleteError.message);
                 }
+            } else {
+                setError(`Inicio de sesión fallido. Intentos restantes: ${2 - attempts}`);
+            }
+        }
     };
 
     return (
@@ -85,7 +96,6 @@ function LogIn() {
                     </div>
                     <a href="/SignUp">No tienes cuenta Registrate</a>
                 </form>
-                {success && <p className="success-message">Inicio de sesión exitoso. Redirigiendo...</p>}
             </main>
             <div className="copyright">
                 Copyright {new Date().getFullYear()} &copy;

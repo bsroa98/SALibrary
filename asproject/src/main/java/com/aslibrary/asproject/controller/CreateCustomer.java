@@ -124,4 +124,19 @@ public class CreateCustomer {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el servidor: " + e.getMessage());
         }
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteCustomer(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        try {
+            boolean deleted = customerService.deleteCustomerByEmail(email);
+            if (deleted) {
+                return ResponseEntity.ok("Usuario eliminado exitosamente");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error eliminando el usuario: " + e.getMessage());
+        }
+    }
 }
