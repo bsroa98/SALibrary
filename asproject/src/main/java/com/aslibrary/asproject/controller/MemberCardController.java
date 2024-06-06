@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/membercard")
+@CrossOrigin(origins = "http://localhost:3000")
 public class MemberCardController {
 
     @Autowired

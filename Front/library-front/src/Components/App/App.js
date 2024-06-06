@@ -7,6 +7,7 @@ import Shop from '../Shop/Shop';
 import '../../Styles/App.css';
 import '../../Styles/cart.css';
 import Cart from "../Cart";
+import Reset from '../Reset/Reset';
 import header from '../../imgs/header.jpg';
 
 const AuthContext = createContext();
@@ -19,7 +20,9 @@ function App() {
     const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
-        console.log('userId changed:', userId);
+        if (userId) {
+            fetchMemberCard();
+        }
     }, [userId]);
 
     const generateMemberCard = async () => {
@@ -30,10 +33,8 @@ function App() {
         }
         try {
             const response = await axios.post(`http://localhost:80/api/membercard/generate/${userId}`, userId);
-            console.log('response.data', response.data);
             const newMemberCard = response.data;
-            console.log('newMemberCard', newMemberCard);
-            await axios.put(`http://localhost:80/api/customers/${userId}/update-member-card`, {idMemberCard: newMemberCard.id});
+            await axios.put(`http://localhost:80/api/customers/${userId}/update-member-card`, { idMemberCard: newMemberCard.id });
             setMemberCard(newMemberCard);
         } catch (error) {
             console.error("Error generating member card", error);
@@ -55,7 +56,7 @@ function App() {
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, userName, setUserName, userId, setUserId }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, userName, setUserName, userId, setUserId, memberCard, setMemberCard }}>
             <Router>
                 <div className="body">
                     <div className="header">
@@ -63,7 +64,7 @@ function App() {
                             <div className="button-container">
                                 <p>¡Bienvenido {userName} a la mejor tienda de libros!</p>
                                 {memberCard ? (
-                                    <button className="btn btn-primary btn-block" onClick={fetchMemberCard}>Ver Tarjeta de Membresía</button>
+                                    <button className="btn btn-primary btn-block" onClick={() => setShowPopup(true)}>Ver Tarjeta de Membresía</button>
                                 ) : (
                                     <button className="btn btn-primary btn-block" onClick={generateMemberCard}>Generar Tarjeta de Membresía</button>
                                 )}
@@ -80,6 +81,7 @@ function App() {
                         <Route path="/SignUp" element={<Signup />} />
                         <Route path="/Shop" element={<Shop />} />
                         <Route path="/Cart" element={<Cart />} />
+                        <Route path="/Reset" element={<Reset />} />
                     </Routes>
                     <footer>
                         <p></p>

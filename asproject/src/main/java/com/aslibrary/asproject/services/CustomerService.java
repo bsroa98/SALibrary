@@ -125,4 +125,12 @@ public class CustomerService {
 
         return customerRepository.save(customer);
     }
+
+    public Customer findByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
+    public void updateCustomerPassword(Customer customer) {
+        customerRepository.save(customer);
+    }
 }

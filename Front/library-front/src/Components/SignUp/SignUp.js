@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google';
 import '../../Styles/SignUp.css';
 
 function SignUp() {
@@ -97,6 +98,21 @@ function SignUp() {
         } catch (error) {
             console.error('There was an error registering the user!', error);
         }
+    };
+
+    const handleGoogleSuccess = async (response) => {
+        const tokenId = response.credential;
+        try {
+            const res = await axios.post('http://localhost:80/api/customers/google-login', { tokenId });
+            console.log('User registered with Google:', res.data);
+            setShowPopup(true);
+        } catch (error) {
+            console.error('There was an error registering the user with Google!', error);
+        }
+    };
+
+    const handleGoogleFailure = (error) => {
+        console.error('Google login failed:', error);
     };
 
     return (
@@ -254,6 +270,11 @@ function SignUp() {
                         >
                             Registrarse
                         </button>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={handleGoogleFailure}
+                            buttonText="Registrarse con Google"
+                        />
                     </div>
                 </div>
                 <div className="copyright">

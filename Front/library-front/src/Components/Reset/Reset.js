@@ -2,12 +2,13 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App/App';
-import '../../Styles/LogIn.css';
+import '../../Styles/Reset.css';
 
-function LogIn() {
-    const { setIsAuthenticated, setUserName, setUserId, setMemberCard } = useContext(AuthContext);
+function Reset() {
+    const { setIsAuthenticated, setUserName, setUserId } = useContext(AuthContext);
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -20,33 +21,32 @@ function LogIn() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-                try {
-                    const response = await axios.post('http://localhost:80/api/customers/login', {
-                        email,
-                        password
-                    });
-                    const userData = response.data;
-                    setUserId(userData.id);
-                    setUserName(userData.name);
-                    setIsAuthenticated(true);
+        if (newPassword !== confirmPassword) {
+            setError('Las contraseñas no coinciden');
+            return;
+        }
 
-                    if (userData.idMemberCard) {
-                        const cardResponse = await axios.get(`http://localhost:80/api/membercard/customer/${userData.id}`);
-                        setMemberCard(cardResponse.data);
-                    } else {
-                        setMemberCard(null);
-                    }
-
-                    navigate('/Shop');
-                } catch (error) {
-                    console.error('Error during login:', error);
-                    setError('Login failed. Please try again.');
-                }
+        try {
+            const response = await axios.put('http://localhost:80/api/customers/reset-password', {
+                email,
+                newPassword,
+                confirmPassword
+            });
+            console.log('Cambio de contraseña exitoso:', response.data);
+            setSuccess(true);
+            setTimeout(() => {
+                setSuccess(false);
+                navigate('/LogIn');
+            }, 2000);
+        } catch (error) {
+            console.error('Error al cambiar la contraseña:', error);
+            setError('Error al cambiar la contraseña. Por favor, intenta de nuevo.');
+        }
     };
 
     return (
         <div className="contentlogin">
-            <div className="inicio">Iniciar Sesión</div>
+            <div className="inicio">Cambia tu Contraseña</div>
             <main className="body">
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -64,9 +64,17 @@ function LogIn() {
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 className="form-control password-input"
-                                placeholder="Contraseña*"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Nueva Contraseña*"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                            />
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                className="form-control password-input"
+                                placeholder="Confirmar Nueva Contraseña*"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                             />
                             <button
@@ -79,13 +87,11 @@ function LogIn() {
                         </div>
                     </div>
                     {error && <p className="error-message">{error}</p>}
-                    <a href="/Reset">¿Olvidaste tu contraseña?</a>
                     <div className="buttonLogIn">
-                        <button className="btn btn-primary btn-block">Iniciar Sesión</button>
+                        <button className="btn btn-primary btn-block">Cambiar Contraseña</button>
                     </div>
-                    <a href="/SignUp">No tienes cuenta Registrate</a>
                 </form>
-                {success && <p className="success-message">Inicio de sesión exitoso. Redirigiendo...</p>}
+                {success && <p className="success-message">Cambio de contraseña exitoso. Redirigiendo...</p>}
             </main>
             <div className="copyright">
                 Copyright {new Date().getFullYear()} &copy;
@@ -94,4 +100,4 @@ function LogIn() {
     );
 }
 
-export default LogIn;
+export default Reset;
