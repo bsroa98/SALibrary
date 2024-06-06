@@ -18,6 +18,7 @@ function App() {
     const [userId, setUserId] = useState(null);
     const [memberCard, setMemberCard] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
+    const [rechargeValue, setRechargeValue] = useState('');
 
     useEffect(() => {
         if (userId) {
@@ -26,7 +27,6 @@ function App() {
     }, [userId]);
 
     const generateMemberCard = async () => {
-        console.log('Generando tarjeta de membresía para userId:', userId);
         if (!userId) {
             console.error("userId is null or undefined");
             return;
@@ -52,6 +52,22 @@ function App() {
             setShowPopup(true);
         } catch (error) {
             console.error("Error fetching member card", error);
+        }
+    };
+
+    const handleRecharge = async () => {
+        if (!rechargeValue || isNaN(rechargeValue)) {
+            console.error("Invalid recharge value");
+            return;
+        }
+        try {
+            const response = await axios.put(`http://localhost:80/api/membercard/customer/${userId}/memberCar/${memberCard.id}`, {
+                rechargeValue: parseInt(rechargeValue, 10)
+            });
+            setMemberCard({ ...memberCard, balance: memberCard.balance + parseInt(rechargeValue, 10) });
+            setRechargeValue('');
+        } catch (error) {
+            console.error("Error recharging balance", error);
         }
     };
 
@@ -95,6 +111,16 @@ function App() {
                         <p>ID de Membresía: {memberCard.id}</p>
                         <p>Número de Tarjeta: {memberCard.cardNumber}</p>
                         <p>Saldo: ${memberCard.balance}</p>
+                        <div className="recharge-container">
+                        <h6>*Valores entre COP 50000 y COP 200000</h6>
+                            <input
+                                type="number"
+                                placeholder="Valor de recarga"
+                                value={rechargeValue}
+                                onChange={(e) => setRechargeValue(e.target.value)}
+                            />
+                            <button onClick={handleRecharge}>Recargar</button>
+                        </div>
                         <button onClick={() => setShowPopup(false)}>Cerrar</button>
                     </div>
                 </div>
