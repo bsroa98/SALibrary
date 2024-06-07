@@ -15,6 +15,7 @@ function Shop() {
   const token = "?sp=r&st=2024-06-04T16:00:11Z&se=2024-06-13T00:00:11Z&sv=2022-11-02&sr=c&sig=6oolhHY5Gxx3atdaLKxpOB6ui5r8793awbTc4QEjKNA%3D"
 
   const [books, setBooks] = useState([]);
+  const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
     async function fetchBooks() {
@@ -99,6 +100,24 @@ function Shop() {
     const { name, value } = event.target;
     setFilters({ ...filters, [name]: value });
   };
+
+  useEffect(() => {
+      fetch('http://localhost:3001/api/character')
+        .then(function(response){
+          if(!response.ok){
+            console.log('Error with status code: ' + response.status);
+            return;
+          }
+
+          response.json().then(function(data){
+            console.log(data);
+            setCharacters(data.results);
+          });
+        })
+        .catch(function(err){
+          console.log('Error: ' + err);
+        });
+    }, []);
 
 
   const addToCart = (product) => {
@@ -227,6 +246,16 @@ function Shop() {
             ))}
           </section>
         </div>
+        <section className="character">
+          {characters.map((character) => (
+            <div className="charactercard" key={character.id}>
+              <img src={character.image} alt={character.name} />
+              <h3>{character.name}</h3>
+              <p>Status: {character.status}</p>
+              <p>Species: {character.species}</p>
+            </div>
+          ))}
+        </section>
         <footer>
           <p></p>
         </footer>

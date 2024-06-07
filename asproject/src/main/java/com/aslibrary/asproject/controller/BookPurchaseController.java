@@ -86,6 +86,7 @@ public class BookPurchaseController {
                 CustomerDTO customerDTO = customerMapperService.toCustomerDTO(customer);
                 PurchaseDTO purchaseDTO = new PurchaseDTO(customerDTO, totalAmount, bookIds, clientIp);
                 cosmosDbService.savePurchase(purchaseDTO);
+                System.out.println("Transaction completed by: " + customer.getName());
             } else {
                 return ResponseEntity.badRequest().body("Customer not found");
             }

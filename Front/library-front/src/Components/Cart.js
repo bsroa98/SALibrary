@@ -10,20 +10,22 @@ function Cart({ onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIt
     const token = "?sp=r&st=2024-06-04T16:00:11Z&se=2024-06-13T00:00:11Z&sv=2022-11-02&sr=c&sig=6oolhHY5Gxx3atdaLKxpOB6ui5r8793awbTc4QEjKNA%3D";
     const [customerInfo, setCustomerInfo] = useState({
         customerId: '',
-        membershipId: ''
+        membershipId: '',
+        customerName: ''
     });
     const [showCart] = useState(true);
-    const { isAuthenticated, userId, memberCard } = useContext(AuthContext); // Obtener userId y memberCard del contexto
+    const { isAuthenticated, userId, memberCard, userName } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isAuthenticated && userId && memberCard) {
+        if (isAuthenticated && userId && memberCard && userName) {
             setCustomerInfo({
                 customerId: userId,
-                membershipId: memberCard.id
+                membershipId: memberCard.id,
+                customerName: userName
             });
         }
-    }, [isAuthenticated, userId, memberCard]);
+    }, [isAuthenticated, userId, memberCard, userName]);
 
     const calculateTotal = () => {
         return Object.values(cartItems).reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -46,6 +48,7 @@ function Cart({ onCloseCart, cartItems, onAddToCart, onRemoveFromCart, setCartIt
             if (response.status === 200) {
                 alert('Payment successful');
                 setCartItems([]);
+                console.log(`Transaction completed by: ${customerInfo.customerName}`); // Imprimir el nombre del cliente por consola
             } else {
                 alert('Payment failed');
             }
